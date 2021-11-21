@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import PropTypes from 'prop-types';
-import './Connection.css';
+import '../../styles.css';
 
 import Web3Service from '../../service/Web3Service';
 

@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A simple Web3 React library for user wallet authentication and cloud data storage",
   "keywords": [
     "Ethereum",
@@ -26,16 +26,27 @@
     "url": "https://github.com/V00D00-child/web3-cloud/issues"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@babel/preset-react": "^7.16.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
     "@storybook/addon-actions": "^6.3.12",
     "@storybook/addon-essentials": "^6.3.12",
     "@storybook/addon-links": "^6.3.12",
     "@storybook/react": "^6.3.12",
     "babel-loader": "^8.2.3",
+    "postcss": "^8.3.11",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "rollup": "^2.60.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.1",
+    "rollup-plugin-terser": "^7.0.2",
     "web3": "^1.6.1"
   },
   "peerDependencies": {
@@ -46,7 +57,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "build-lib": "rollup -c"
   },
   "dependencies": {}
 }

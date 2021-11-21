@@ -2,7 +2,7 @@
 
 Web3 Verify is web3 Ethereum-compatible authenticator
 
-This is Web3 Verify an Web3 React library for user wallet authentication. Web3 Verify sole purpose is to disrupt legacy web authentication patterns. It acts as bridge between web2 and web3, which allows developers to combine the security of blockchain technology with scalable cloud technology.  The API is simple: just provide an Ethereum public address, encrpted data (signed with Ethereum signature), cloud storge type, and Web3 Verify will store your encrypted data in the cloud.
+This is Web3 Verify an Web3 React library for user wallet authentication. It acts as bridge between web2 and web3, which allows developers to combine the security of blockchain technology with scalable cloud technology.  The API is simple: just provide an Ethereum public address, encrpted data (signed with Ethereum signature), cloud storge type, and Web3 Verify will store your encrypted data in the cloud.
 
 ---
 
