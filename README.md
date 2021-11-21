@@ -18,4 +18,33 @@ This is Web3 Verify an Web3 React library for user wallet authentication. It act
 $ npm install web3-verify
 ```
 
-## License
+## Usage 
+### Connection(component)
+- Dapp UI Connection component for user interaction with Ethereum wallet
+
+1. Add import
+ ```
+ import { Connection } from "web3-cloud";
+```
+2. Add commponent
+```
+// Connection property types (use as a reference)
+  Connection.propTypes = {
+    primary: PropTypes.bool,
+    backgroundColor: PropTypes.string,
+    size: PropTypes.oneOf(['small', 'medium', 'large']),
+    connectLabel: PropTypes.string.isRequired,
+    disconnectLabel: PropTypes.string.isRequired,
+  };
+```
+
+```
+// Example implementation React
+  <Connection
+        backgroundColor="blue"
+        size="medium"
+        connectLabel="Connect wallet"
+        disconnectLabel="Disconnect wallet"
+        primary={true}
+  />
+```
