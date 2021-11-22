@@ -68,7 +68,7 @@ Structure of data returned from Connection component
       connectLabel="Connect wallet"
       disconnectLabel="Disconnect wallet"
       primary={true}
-      parentWeb3Callback={{callback}}
+      parentWeb3Callback={callback}
   />
 ```
 
