@@ -13,38 +13,44 @@ export const Connection = ({
   size, 
   connectLabel,
   disconnectLabel,
+  parentWeb3Callback,
   ...props
   }) => {
 
   const mode = primary ? 'connection-button--primary' : 'connection-button--secondary';
-  const [isConnected, setIsConnect] = useState(false);
-  const [connection, setConnection] = useState(null);
-  const [account, setAccount] = useState('');
-  const [network, setNetwork] = useState('');
-  const [networkId, setNetworkId] = useState('');
-  const [networkScanner, setNetworkScanner] = useState('');
-  const [ethBalance, setEthBalance] = useState('');
+  const [web3Values, setWeb3values] = useState({
+    isConnected: false,
+    connection: null,
+  });
 
   const doConnectWallet  = async (event) => {
     event.preventDefault();
 
-    if( window.ethereum && connection === null ) {
+    if( window.ethereum && web3Values.connection === null ) {
 
       const web3 = await Web3Service.loadWeb3();
 
       if(web3) {
-        setConnection(web3);
-
         const account = await Web3Service.loadAccount();
         const networkObj = await Web3Service.loadNetwork(web3);
         const ethBalance = await Web3Service.loadEthBalance(web3,account);
-        
-        setAccount(account);
-        setNetwork(networkObj.network);
-        setNetworkId(networkObj.networkId);
-        setNetworkScanner(networkObj.scanner);
-        setEthBalance(ethBalance);
-        setIsConnect(true);
+
+        setWeb3values((web3Values) => ({
+          ...web3Values,
+          isConnected: true,
+          connection: web3,
+        }));
+
+        // pass to parent
+        parentWeb3Callback({
+          isConnected: true,
+          connection: web3,
+          account: account,
+          network: networkObj.network,
+          networkId: networkObj.networkId,
+          networkScanner: networkObj.scanner,
+          ethBalance: ethBalance
+        });
 
         window.ethereum.on('accountsChanged', async () => { 
           console.log('account changed');
@@ -59,15 +65,22 @@ export const Connection = ({
   const doDisConnectWallet = async (event) => {
     event.preventDefault();
 
-    setAccount('');
-    setNetwork('');
-    setNetworkId('');
-    setNetworkScanner('');
-    setEthBalance('');
-    setIsConnect(false);
-    setConnection(null);
-    
-    console.log('button clicked disconnect from wallet');
+    setWeb3values((web3Values) => ({
+      ...web3Values,
+      isConnected: false,
+      connection: null,
+    }));
+
+    // pass to parent
+    parentWeb3Callback({
+      isConnected: false,
+      connection: null,
+      account: '',
+      network: '',
+      networkId: '',
+      networkScanner: '',
+      ethBalance: ''
+    });
   }
 
   return (
@@ -77,22 +90,10 @@ export const Connection = ({
         className={['connection-button', `connection-button--${size}`, mode].join(' ')}
         style={backgroundColor && { backgroundColor }}
         {...props}
-        onClick={(e) => isConnected ? doDisConnectWallet(e) : doConnectWallet (e) }
-      >
-        {isConnected ? disconnectLabel : connectLabel}
+        onClick={(e) => web3Values.isConnected ? doDisConnectWallet(e) : doConnectWallet (e) }
+        >
+        {web3Values.isConnected ? disconnectLabel : connectLabel}
       </button>
-
-      {account && 
-        <div>
-          <a href={`${networkScanner}/${account}`} target="_blank" rel="noopener noreferrer">
-            Ethereum Account: {account}
-          </a> 
-          <p>ETH: {ethBalance}</p>
-          <p>Network: {network}</p>
-          <p>NetworkID: {networkId}</p>
-                 
-        </div>
-      }
     </div>
   );
 };
@@ -103,6 +104,7 @@ Connection.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   connectLabel: PropTypes.string.isRequired,
   disconnectLabel: PropTypes.string.isRequired,
+  parentWeb3Callback: PropTypes.func.isRequired,
 };
 
 Connection.defaultProps = {

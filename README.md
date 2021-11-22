@@ -21,12 +21,15 @@ $ npm install web3-verify
 ```
 
 ## Usage 
+List of components:
+1. Connection
 ### Connection(component)
-- Dapp UI Connection component for user interaction with Ethereum wallet
+Dapp UI Connection component for user interaction with Ethereum wallet
 
-1. Add import
+1. Add imports for web3-cloud and useCallback(react hooks)
  ```
  import { Connection } from "web3-cloud";
+ import { useCallback } from "react";
 ```
 2. Add commponent
 ```
@@ -37,17 +40,35 @@ $ npm install web3-verify
     size: PropTypes.oneOf(['small', 'medium', 'large']),
     connectLabel: PropTypes.string.isRequired,
     disconnectLabel: PropTypes.string.isRequired,
+    parentWeb3Callback: PropTypes.func.isRequired,
   };
 ```
 
+Structure of data returned from Connection component
+| Data | Data Type | Description
+| --- | --- | --- |
+| isConnected | boolean | Value to determine if user has connected wallet 
+| connection | window.ethereum | Web3 provider
+| account | string | Ethereum public address
+| network | string | Name of connected network
+| networkId | string | Connected network chain ID
+| networkScanner | string | Block scanner url for connected network
+| ethBalance | string | Current ETH blance of connnected account
+
+- Example implementation using React
 ```
-// Example implementation React
+// ReactHooks Callback
+  const callback = useCallback((web3Values) => {
+    console.log(web3Values);
+  }, []);
+
   <Connection
-        backgroundColor="blue"
-        size="medium"
-        connectLabel="Connect wallet"
-        disconnectLabel="Disconnect wallet"
-        primary={true}
+      backgroundColor="blue"
+      size="medium"
+      connectLabel="Connect wallet"
+      disconnectLabel="Disconnect wallet"
+      primary={true}
+      parentWeb3Callback={{callback}}
   />
 ```
 
@@ -58,5 +79,3 @@ $ npm install web3-verify
 ## Authors
 
 *  [Idris Bowman](https://www.linkedin.com/in/idris-bowman)
-
-
