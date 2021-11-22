@@ -15,7 +15,7 @@ This is Web3 Cloud an Web3 React library for user wallet authentication. It acts
 ## Install
 
 ```
-$ npm install web3-verify
+$ npm i web3-cloud
 ```
 
 ## Usage 
