@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import external from 'rollup-plugin-peer-deps-external';
 import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
+import json from "@rollup/plugin-json";
 
 export default [
   {
@@ -34,6 +35,7 @@ export default [
       commonjs({ 
         include: ["./index.js", "node_modules/**"] 
         }),
+      json(),
       external(),
       terser(),
     ]
