@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "A simple Web3 React library for user wallet authentication and cloud data storage",
   "keywords": [
     "Ethereum",
@@ -9,7 +9,7 @@
     "auth",
     "connect",
     "signature",
-    "encrpt",
+    "encrypt",
     "decrypt"
   ],
   "author": {
@@ -51,8 +51,7 @@
   },
   "peerDependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "web3": "^1.6.1"
+    "react-dom": "^17.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -60,5 +59,7 @@
     "build-storybook": "build-storybook",
     "build-lib": "rollup -c"
   },
-  "dependencies": {}
+  "dependencies": {
+    "web3": "^1.6.1"
+  }
 }
