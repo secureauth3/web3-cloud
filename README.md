@@ -76,16 +76,15 @@ Structure of data returned from Connection component (passweb3data callback)
   provider: "metamask",
   verificationType: "EIP712",
   signature: {
-    account: "0x91D64b9ceA4D580B857D77e25fECe02d5F5150cc"
-    chainId: 421611
+    account: "0xEc11b30ed0D77aA652b6Fa756C271a03877D150F"
+    chainId: 4
     ens: "web3.eth"
     expiration: 1641251976
     isSigned: true
-    isVerified: true
     message: "Web3 Cloud wants to use your digital signature to sign into our dApp. Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. This signature will ONLY be used to sign you in and is set to expire in 2 minutes. Please be aware that signing will not cost any gas!"
     nonce: "wbYho2YSKudoZnv3F"
-    r: "0x8f0f8b39bae996305fe351b8b71ecb8950378bc83d28053ca4bed07fdf722680"
-    s: "0x61512a003d41fa094e13981f7f471c037237c465dd9991f8f403b2b4d678897b"
+    r: "0x8f0f8bgdfdgd9909090ffdfddfde994492378bc83d28053ca4bed07fdf722680"
+    s: "0x61512a003d41fa094e13981f7f471c037245645454545454544545452278897b"
     sigType: "EIP712"
     url: "http://localhost:6006"
     v: 27
@@ -170,7 +169,7 @@ Structure of data returned from Connection component (errorcallback callback)
 ---
 <img src="readme-images/web3-cloud-connection-component-sig.jpg" width="100%" margin-bottom="5%" align="left" >
 ---
-<img src="readme-images/web3-cloud-connection-component-sign-verifying.jpg" width="100%" margin-bottom="5%" align="left" >
+<img src="readme-images/web3-cloud-connection-component-sig-verifying.jpg" width="100%" margin-bottom="5%" align="left" >
 ---
 
 ## Local dev
