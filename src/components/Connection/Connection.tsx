@@ -296,7 +296,7 @@ export const Connection:FC<ConnectionProps> = ({
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
             style={buttonStyle}
-            disabled={!isValidEmail(web3Values.email) || isEmpty(web3Values.firstName) || isEmpty(web3Values.lastName)}
+            disabled={!isValidEmail(web3Values.email) || isEmpty(web3Values.firstName) || isEmpty(web3Values.lastName) || web3Values.isVerifying}
             {...props}
             >
             Sign up with Metamask
@@ -326,7 +326,7 @@ export const Connection:FC<ConnectionProps> = ({
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
             style={buttonStyle}
-            disabled={!isValidEmail(web3Values.email)}
+            disabled={!isValidEmail(web3Values.email) || web3Values.isVerifying }
             {...props}
             >
             Login in with Metamask
@@ -339,7 +339,7 @@ export const Connection:FC<ConnectionProps> = ({
 
   const renderVerifyingView = () => {
     return (
-      <div>{verifyinglabel}</div>
+      <p className="web3-cloud-verifyinglabel">{verifyinglabel}</p>
     );
   }
 
@@ -353,7 +353,7 @@ export const Connection:FC<ConnectionProps> = ({
             <div>
               <header>
                 <img src={logourl} alt="profile-img" className="web3-cloud-profile-img-card"/>
-                <h1>Welcome to {dappname}</h1>
+                <h1 className="web3-cloud-dapp-name">Welcome to {dappname}</h1>
               </header>
               {web3Values.isRenderSignUp ? 
               <div>{renderSignUpView()}</div>

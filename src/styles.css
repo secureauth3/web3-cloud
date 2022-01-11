@@ -7,6 +7,7 @@
     display: inline-block;
     line-height: 1;
 }
+
 .web3-cloud-connection-button:disabled {
   background-color: gray !important;
 }
@@ -68,6 +69,14 @@
   margin-top: 2%;
   text-decoration: underline;
   color: #1ea7fd;
+}
+
+.web3-cloud-dapp-name {
+  color: black;
+}
+
+.web3-cloud-verifyinglabel {
+  color: black;
 }
 
 .web3-cloud-signin-toggle:hover {
