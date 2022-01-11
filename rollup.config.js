@@ -1,41 +1,50 @@
-import babel from 'rollup-plugin-babel';
-import commonjs from "rollup-plugin-commonjs";
-import resolve from '@rollup/plugin-node-resolve';
-import external from 'rollup-plugin-peer-deps-external';
-import { terser } from 'rollup-plugin-terser';
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import typescript from "@rollup/plugin-typescript";
+import dts from "rollup-plugin-dts";
 import postcss from 'rollup-plugin-postcss';
+import { terser } from "rollup-plugin-terser";
+import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+
+const packageJson = require("./package.json");
 
 export default [
   {
-    input: './src/index.js',
+    input: './src/index.ts',
     output: [
       {
-        file: 'dist/index.js',
-        format: 'cjs',
-        // sourcemap: true,
+        file: packageJson.main,
+        format: "cjs",
+        sourcemap: true,
       },
       {
-        file: 'dist/index.es.js',
-        format: 'es',
-        exports: 'named',
-        // sourcemap: true,
-      }
+        file: packageJson.module,
+        format: "esm",
+        sourcemap: true,
+      },
     ],
     plugins: [
-      postcss({
-        plugins: [],
-        minimize: true,
-        }),
+      peerDepsExternal(),
       resolve(),
-      babel({
-        exclude: 'node_modules/**',
-        presets: ['@babel/preset-react']
-      }),
-      commonjs({ 
-        include: ["./index.js", "node_modules/**"] 
-        }),
-      external(),
+      commonjs(),
+      typescript({ tsconfig: "./tsconfig.json" }),
+      postcss(), 
+
+      // postcss({
+      //   plugins: [],
+      //   minimize: true,
+      //   }),
+      // babel({
+      //   exclude: 'node_modules/**',
+      //   presets: ['@babel/preset-react']
+      // }),
       terser(),
-    ]
-  }
+    ],
+  },
+  {
+    input: "dist/esm/types/index.d.ts",
+    output: [{ file: "dist/index.d.ts", format: "esm" }],
+    plugins: [dts()],
+    external: [/\.css$/],
+  },
 ];

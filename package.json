@@ -1,7 +1,7 @@
 {
   "name": "web3-cloud",
-  "version": "0.1.1",
-  "description": "A simple Web3 React library for user wallet authentication and cloud data storage",
+  "version": "0.2.0",
+  "description": "A simple Web3 React library for Ethereum wallet authentication and cloud data storage",
   "keywords": [
     "Ethereum",
     "web3",
@@ -26,42 +26,60 @@
     "url": "https://github.com/V00D00-child/web3-cloud/issues"
   },
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.es.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
   "devDependencies": {
-    "@babel/core": "7.16.0",
-    "@babel/preset-react": "7.16.0",
+    "@babel/core": "7.16.5",
+    "@babel/preset-env": "7.16.5",
+    "@babel/preset-react": "7.16.5",
+    "@babel/preset-typescript": "7.16.5",
+    "@rollup/plugin-commonjs": "21.0.1",
     "@rollup/plugin-node-resolve": "13.0.6",
+    "@rollup/plugin-typescript": "8.3.0",
     "@storybook/addon-actions": "6.3.12",
     "@storybook/addon-essentials": "6.3.12",
     "@storybook/addon-links": "6.3.12",
     "@storybook/react": "6.3.12",
+    "@testing-library/react": "12.1.2",
+    "@types/jest": "27.0.3",
+    "@types/react": "17.0.34",
+    "babel-jest": "27.4.5",
     "babel-loader": "8.2.3",
-    "immer": ">=9.0.6",
-    "json-schema": ">=0.4.0",
-    "postcss": "8.3.11",
-    "prop-types": "15.7.2",
+    "identity-obj-proxy": "3.0.0",
+    "jest": "27.4.5",
+    "postcss": "8.4.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "regenerator-runtime": "0.13.9",
     "rollup": "2.60.0",
-    "rollup-plugin-babel": "4.4.0",
-    "rollup-plugin-commonjs": "10.1.0",
+    "rollup-plugin-dts": "4.0.1",
     "rollup-plugin-peer-deps-external": "2.2.4",
-    "rollup-plugin-postcss": "4.0.2",
+    "rollup-plugin-postcss": "4.0.1",
     "rollup-plugin-terser": "7.0.2",
-    "trim": ">=0.0.3",
-    "web3": "^1.6.1"
+    "tslib": "2.3.1",
+    "typescript": "4.4.4"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "web3": "^1.6.1"
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "rm -rf coverage/ && jest --verbose",
+    "test:watch": "rm -rf coverage/ && jest --watchAll --verbose",
+    "test:coverage": "rm -rf coverage/ && jest --verbose --coverage",
+    "clear:jest": "jest --clearCache",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "build-lib": "rollup -c"
+    "build-lib": "rm -rf dist/ && rollup -c"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@stablelib/random": "1.0.1",
+    "crypto-js": "4.1.1",
+    "ethers": "5.5.2",
+    "bootstrap": "5.1.3"
+  }
 }
