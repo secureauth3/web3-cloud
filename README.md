@@ -9,6 +9,14 @@ Web3-Cloud is a system designed to create simple secure User Sign-up, Sign In, a
 ## Device support
 (Desktop, tablet, Mobile)
 
+## Requirements
+- 4.14.0 of MetaMask
+- Infura Project Id (https://infura.io/)
+- @walletconnect/web3-provider - 1.7.1 (https://www.npmjs.com/package/@walletconnect/web3-provider)
+- react - 17.0.2 (https://www.npmjs.com/package/react)
+- react-dom - 17.0.2 (https://www.npmjs.com/package/react-dom)
+---
+
 ## Signature Verification Types
 - EIP712 - MetaMask Sign Typed Data v4. Currently represents the latest version of EIP712 spec. 
 
@@ -25,11 +33,6 @@ Current Blockchain Network support
 
 ## Cloud storage support(User Identity Management)
 - (coming soon)
----
-
-## Requirements
-- 4.14.0 of MetaMask
-- Infura Project Id (https://infura.io/)
 ---
 
 ## Install
