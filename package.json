@@ -76,7 +76,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build-lib": "rm -rf dist/ && rollup -c",
-    "publish": "build-lib && npm login && npm publish"
+    "publish": "npm run build-lib && npm login && npm publish"
   },
   "dependencies": {
     "@stablelib/random": "1.0.1",
