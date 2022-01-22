@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A simple Web3 React library for Ethereum wallet authentication and cloud data storage",
   "keywords": [
     "Ethereum",
@@ -78,7 +78,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build-lib": "rm -rf dist/ && rollup -c",
-    "publish": "npm run build-lib && npm login && npm publish"
+    "publish:lib": "npm run build-lib && npm login && npm publish"
   },
   "dependencies": {
     "@stablelib/random": "1.0.1",
