@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A simple Web3 React library for Ethereum wallet authentication and cloud data storage",
   "keywords": [
     "Ethereum",
