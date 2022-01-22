@@ -5,6 +5,8 @@ import dts from "rollup-plugin-dts";
 import postcss from 'rollup-plugin-postcss';
 import { terser } from "rollup-plugin-terser";
 import peerDepsExternal from 'rollup-plugin-peer-deps-external';
+import image from '@rollup/plugin-image';
+import json from '@rollup/plugin-json';
 
 const packageJson = require("./package.json");
 
@@ -39,6 +41,8 @@ export default [
       //   presets: ['@babel/preset-react']
       // }),
       terser(),
+      image(),
+      json()
     ],
   },
   {
