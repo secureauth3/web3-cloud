@@ -6,6 +6,9 @@ Web3-Cloud is a system designed to create simple secure User Sign-up, Sign In, a
 
 ---
 
+## Device support
+(Desktop, tablet, Mobile)
+
 ## Signature Verification Types
 - EIP712 - MetaMask Sign Typed Data v4. Currently represents the latest version of EIP712 spec. 
 
@@ -26,6 +29,7 @@ Current Blockchain Network support
 
 ## Requirements
 - 4.14.0 of MetaMask
+- Infura Project Id (https://infura.io/)
 ---
 
 ## Install
@@ -43,27 +47,30 @@ List of components:
     primary: PropTypes.bool,
     backgroundcolor: PropTypes.string,
     size: PropTypes.oneOf(['small', 'medium', 'large']),
-    verfiyinglabel: PropTypes.string.isRequired,
+    verifyinglabel: PropTypes.string.isRequired,
+    infuraId: PropTypes.string.isRequired,
     passweb3data: PropTypes.func.isRequired,
     errorcallback: PropTypes.func.isRequired,
     verificationtype: PropTypes.oneOf(['EIP712']),
     dappname: PropTypes.string.isRequired,
     logourl: PropTypes.string,
     dappid: PropTypes.string,
+    homePageurl: PropTypes.string
   };
 ```
 Structure of data returned from Connection component (passweb3data callback)
 | Data | Data Type | Description
 | --- | --- | --- |
-| actionType | string | Type of authentication (SIGN_UP, SIGN_IN, SIGN_OUT, CHANGE_ACCOUNT, CHANGE_NETWORK) 
+| actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
 | verificationType | string | Signature type (EIP712)
 | networkName | string | Name of connected network
 | networkScanner | string | Block scanner URL for connected network
 | email | string | Account email address
-| provider | string | Wallet provider (Metamask)
+| provider | string | name of Wallet provider (metamask, wallet-connect)
 | firstName | string | Account first name
 | lastName | string | Account last name
 | signature | object | Object that contains signature data
+| web3Provider | ethers.providers.Web3Provider | Web3 Provider
 ```
 // example web3 data
 {
@@ -75,6 +82,7 @@ Structure of data returned from Connection component (passweb3data callback)
   networkScanner: "https://rinkeby-explorer.arbitrum.io/address"
   provider: "metamask",
   verificationType: "EIP712",
+  web3Provider: {connection: {url: 'metamask'}...}
   signature: {
     account: "0xEc11b30ed0D77aA652b6Fa756C271a03877D150F"
     chainId: 4
@@ -153,19 +161,23 @@ Structure of data returned from Connection component (errorcallback callback)
     primary={true}
     backgroundcolor='blue'
     size='large'
-    verfiyinglabel='Verfiying Signature...'
+    verifyinglabel='Verfiying Signature...'
     verificationtype='EIP712'
     dappname='Web3 Cloud'
     dappid='my-dapp'
+    infuraId='27e484dcd9e3efcfd25a83a78777cdf1'
     logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
+    homePageurl='https://idrisbowman.com'
     passweb3data={web3DataCallback}
     errorcallback={web3ErrorCallback}
   />
 ```
 
+<img src="readme-images/web3-cloud-connection-component-sign-up.jpg" width="100%" margin-bottom="5%" align="left" >
+---
 <img src="readme-images/web3-cloud-connection-component-sign-in.jpg" width="100%" margin-bottom="5%" align="left" >
 ---
-<img src="readme-images/web3-cloud-connection-component-sign-up.jpg" width="100%" margin-bottom="5%" align="left" >
+<img src="readme-images/web3-cloud-connection-component-sign-providers.jpg" width="100%" margin-bottom="5%" align="left" >
 ---
 <img src="readme-images/web3-cloud-connection-component-sig.jpg" width="100%" margin-bottom="5%" align="left" >
 ---

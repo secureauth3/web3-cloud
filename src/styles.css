@@ -1,3 +1,4 @@
+/* Buttons */
 .web3-cloud-connection-button {
     font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 700;
@@ -6,53 +7,78 @@
     cursor: pointer;
     display: inline-block;
     line-height: 1;
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
-.web3-cloud-connection-button:disabled {
-  background-color: gray !important;
+.web3-cloud-connection-button-provider {
+  font-family: 'Nunito Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  border: 0;
+  border-radius: 3em;
+  cursor: pointer;
+  display: inline-block;
+  line-height: 1;
+  margin-top: 3%;
+  margin-bottom: 3%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #fff;
+  background-color: #333;
+  font-size: 16px;
+  padding: 12px 24px;
+  display: flex;
+  width: 210px;
 }
+
+.web3-cloud-connection-button:hover {
+  opacity: 0.7;
+}
+
+.web3-cloud-connection-button-provider:hover {
+  opacity: 0.7;
+}
+
 .web3-cloud-connection-button--primary {
   color: white;
   background-color: #1ea7fd;
 }
+
 .web3-cloud-connection-button--secondary {
   color: #333;
   background-color: transparent;
   box-shadow: rgba(0, 0, 0, 0.web3-cloud-15) 0px 0px 0px 1px inset;
 }
+
 .web3-cloud-connection-button--small {
   font-size: 12px;
   padding: 10px 16px;
 }
+
 .web3-cloud-connection-button--medium {
   font-size: 14px;
   padding: 11px 20px;
 }
+
 .web3-cloud-connection-button--large {
   font-size: 16px;
   padding: 12px 24px;
 }
 
-.web3-cloud-invalid {
-  color: red !important;
-}
-
+/* Sign in/Sign up forms */
 .web3-cloud-sign-in-container {
-  width: 60%;
+  width: 100%;
   margin: auto;
   box-shadow: 0px 2px 2px rgb(0 0 0 / 30%);
   padding: 5%;
   text-align: center;
+  background-color: #fff;
+  border-radius: 1.25rem !important;
 }
 
 .web3-cloud-email{
   margin-bottom: 10%;
   margin-top: 10%;
-}
-
-.web3-cloud-policies-container {
-  margin-top: 10%;
-  font-size: 11px;
 }
 
 .web3-cloud-profile-img-card {
@@ -65,35 +91,92 @@
   border-radius: 50%;
 }
 
+.web3-cloud-profile-img-card:hover {
+  cursor: pointer;
+}
+
 .web3-cloud-signin-toggle {
   margin-top: 2%;
   text-decoration: underline;
-  color: #1ea7fd;
+}
+
+.web3-cloud-signin-toggle:hover {
+  cursor: pointer;
 }
 
 .web3-cloud-dapp-name {
   color: black;
 }
 
+.web3-cloud-dapp-name:hover {
+  cursor: pointer;
+}
+
 .web3-cloud-verifyinglabel {
   color: black;
 }
 
-.web3-cloud-signin-toggle:hover {
+/* Connection modal */
+#modal-connect {
+  height: 50%;
+  margin: auto;
+  padding: 0 !important;
+  height: fit-content !important;
+}
+
+.modal-footer {
+  display: block !important;
+}
+
+.wallet-icon-walletconnect {
+  width: 30px;
+  margin-right: 8%;
+}
+
+.wallet-text-walletconnect {
+  margin: 5% 0 0 0;
+}
+
+.wallet-icon-metamask {
+  width: 30px;
+  margin-right: 8%;
+}
+
+.wallet-text-metamask {
+  margin: 5% 0 0 0;
+}
+
+#info-tab:hover {
   cursor: pointer;
+}
+
+.web3-cloud-metamask-provider {
+  display: none;
 }
   
 /* Tablet styling */
 @media only screen and (min-width: 768px) {
+  #modal-connect {
+    width: 40%;
+  }
+
   .web3-cloud-sign-in-container {
-      width: 50%;
+    width: 50%;
   }
 }
 
 /* Desktop styling */
 @media only screen and (min-width: 1024px) {
+  #modal-connect {
+    width: 30%;
+  }
+
+  .web3-cloud-metamask-provider {
+    display: inherit;
+  }
+
   .web3-cloud-sign-in-container {
-      width: 40%;
+    width: 40%;
   }
 }
 

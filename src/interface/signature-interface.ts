@@ -1,3 +1,5 @@
+import { ethers } from "ethers";
+
 export interface Contracts {
     EIP712: {
         address: string;
@@ -24,4 +26,5 @@ export interface SigResult {
     chainId: number;
     account: string;
     ens: string;
+    web3Provider: ethers.providers.Web3Provider | null;
 }

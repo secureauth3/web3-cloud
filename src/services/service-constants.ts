@@ -1,7 +1,6 @@
-import { Contracts, NetworkInfo } from '../model/signature-interface';
+import { Contracts, NetworkInfo } from '../interface/signature-interface';
 
 export const SUPPORTED_NETWORKS = [4, 421611];
-export const SUPPORTED_STORAGE_TYPES = ['Dynamodb'];
 
 export const VERIFICATION_CONTRACTS = new Map<number,Contracts>([
     [4, {

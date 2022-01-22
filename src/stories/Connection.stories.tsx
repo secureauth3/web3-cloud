@@ -1,7 +1,7 @@
 import React from 'react';
-import { ErrorMessageData, ActionData } from '../model/web3-data-interface';
+import { ErrorMessageData, ActionData } from '../interface/web3-data-interface';
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { ConnectionProps } from '../model/connection-interface';
+import { ConnectionProps } from '../interface/connection-interface';
 import { Connection } from '../components/Connection/Connection';
 
 export default {
@@ -219,54 +219,51 @@ const Template: ComponentStory<typeof Connection> = (args: ConnectionProps) =>
   <div>
     <Connection
       primary={true}
-      backgroundcolor='blue'
+      backgroundcolor='green'
       size='large'
       verifyinglabel='Verifiying Signature...'
       verificationtype='EIP712'
       dappname='Web3 Cloud'
       dappid='my-dapp'
+      infuraId=''
       logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
-      passweb3data={(async (web3Values: ActionData) => { 
-        web3data  = web3Values;
-        try {
-          switch(web3Values.actionType) {
-            case 'SIGN_UP':
-              await createUser(web3Values);
-              const tokenResult: any = await getAuthToken(web3Values);
-              await getUserData(tokenResult.accessToken, web3Values);
-              break;
-            case 'SIGN_IN':
-              const tokenResultSignIn: any = await getAuthToken(web3Values);
-
-              // dapp user or owner
-              const getUserSignIn: any = await getUserData(tokenResultSignIn.accessToken, web3Values);
-
-              // admin permission dapp Owner
-              if (getUserSignIn.permissionFlags & 6 ) {
-                await getUserAllData(tokenResultSignIn.accessToken, web3Values);
-              }
-
-              // admin permission web3 cloud app
-              if (getUserSignIn.permissionFlags & 128) {
-                await getOwnerAllData(tokenResultSignIn.accessToken, web3Values);
-              }
-
-              // await patchUserData(tokenResultSignIn.accessToken, web3Values);
-              // await putUserData(tokenResultSignIn.accessToken, web3Values);
-
-              // refresh token
-              // const newTokenResultSignIn: any = await refreshAuthToken(tokenResultSignIn.accessToken, tokenResultSignIn.refreshToken, web3Values);
-              // await getOwnerData(newTokenResultSignIn.accessToken, web3Values);
-              // await deleteUserData(tokenResultSignIn.accessToken, web3Values);
-              break;
-          }
-        } catch(err) {
-          console.log('error when trying to handle web3 data callback:', err)
-        }
+      homePageurl='https://idrisbowman.com/'
+      passweb3data={(async (web3Values: ActionData) => {
+        web3data = web3Values;
+        // try {
+        //   switch(web3Values.actionType) {
+        //     case 'SIGN_UP':
+        //       await createUser(web3Values);
+        //       const tokenResult: any = await getAuthToken(web3Values);
+        //       await getUserData(tokenResult.accessToken, web3Values);
+        //       break;
+        //     case 'SIGN_IN':
+        //       const tokenResultSignIn: any = await getAuthToken(web3Values);
+        //       // dapp user or owner
+        //       const getUserSignIn: any = await getUserData(tokenResultSignIn.accessToken, web3Values);
+        //       // admin permission dapp Owner
+        //       if (getUserSignIn.permissionFlags & 6 ) {
+        //         await getUserAllData(tokenResultSignIn.accessToken, web3Values);
+        //       }
+        //       // admin permission web3 cloud app
+        //       if (getUserSignIn.permissionFlags & 128) {
+        //         await getOwnerAllData(tokenResultSignIn.accessToken, web3Values);
+        //       }
+        //       // await patchUserData(tokenResultSignIn.accessToken, web3Values);
+        //       // await putUserData(tokenResultSignIn.accessToken, web3Values);
+        //       // refresh token
+        //       // const newTokenResultSignIn: any = await refreshAuthToken(tokenResultSignIn.accessToken, tokenResultSignIn.refreshToken, web3Values);
+        //       // await getOwnerData(newTokenResultSignIn.accessToken, web3Values);
+        //       // await deleteUserData(tokenResultSignIn.accessToken, web3Values);
+        //       break;
+        //   }
+        // } catch(err) {
+        //   console.log('error when trying to handle web3 data callback:', err)
+        // }
       })}
-      errorcallback={(async (error:ErrorMessageData) => {
+      errorcallback={(async (error: ErrorMessageData) => {
         errorObject = error;
-      })} 
+      })}   
     />
   </div>;
  

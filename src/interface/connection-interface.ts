@@ -11,4 +11,6 @@ export interface ConnectionProps {
     dappname: string;
     logourl: string;
     dappid: string;
+    infuraId: string;
+    homePageurl: string;
 }

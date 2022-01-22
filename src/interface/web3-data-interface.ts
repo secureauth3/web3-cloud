@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { SigResult } from "./signature-interface";
 
 export interface ActionData {
@@ -10,6 +11,7 @@ export interface ActionData {
     email: string;
     firstName?: string;
     lastName?: string;
+    web3Provider: ethers.providers.Web3Provider | null;
 }
   
 export interface ErrorMessageData {
@@ -20,14 +22,12 @@ export interface ErrorMessageData {
 
 export const enum ACTION_TPYE {
     SIGN_UP = 'SIGN_UP',
-    SIGN_IN = 'SIGN_IN',
-    SIGN_OUT = 'SIGN_OUT',
-    CHANGE_ACCOUNT = 'CHANGE_ACCOUNT',
-    CHANGE_NETWORK = 'CHANGE_NETWORK',
+    SIGN_IN = 'SIGN_IN'
 };
 
 export const enum Providers {
     METAMASK = 'metamask',
+    WALLETCONNECT = 'wallet-connect'
 }
 
 export const enum VerifactionType {
