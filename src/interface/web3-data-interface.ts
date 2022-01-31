@@ -1,13 +1,15 @@
 import { ethers } from "ethers";
-import { SigResult } from "./signature-interface";
 
 export interface ActionData {
     actionType: string;
     verificationType: string;
     networkName: string;
-    provider: string;
+    provideType: string;
     networkScanner: string;
-    signature: SigResult | null;
+    signature: string;
+    chainId: number;
+    address: string;
+    ens: string;
     email: string;
     firstName?: string;
     lastName?: string;
@@ -31,5 +33,6 @@ export const enum Providers {
 }
 
 export const enum VerifactionType {
-    EIP712 = 'EIP712',
+    SIWE = 'SIWE'
 }
+

@@ -7,10 +7,10 @@ export interface ConnectionProps {
     verifyinglabel: string;
     passweb3data: (web3Data: ActionData) => void;
     errorcallback: (errorData: ErrorMessageData) => void;
-    verificationtype: string;
     dappname: string;
     logourl: string;
-    dappid: string;
     infuraId: string;
     homePageurl: string;
+    disableErrorDisplay: boolean;
+    messageToSign: string;
 }

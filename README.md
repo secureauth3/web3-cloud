@@ -1,9 +1,8 @@
 # Web3 Cloud
 
-Web3-Cloud is a Web3 Ethereum-compatible authenticator.
+Simple Sign-up, Sign In Ethereum account authenticator. Power by Sign-In with Ethereum.
 
-Web3-Cloud is a system designed to create simple secure User Sign-up, Sign In, and access control. Letting a user’s Ethereum wallet become an extension of their digital identity without the need for legacy password ownership models. We want to server as bridge between web2 and web3, allowing developers to leverage blockchain technology while also benefiting from high-speed efficiency and cost reduction of cloud infrastructure.
-
+Web3-Cloud is a React compoent library designed to create simple secure User Sign-up, Sign In. Letting a user’s Ethereum wallet become an extension of their digital identity without the need for legacy password ownership models. 
 ---
 
 ## Device support
@@ -17,22 +16,16 @@ Web3-Cloud is a system designed to create simple secure User Sign-up, Sign In, a
 - react-dom - 17.0.2 (https://www.npmjs.com/package/react-dom)
 ---
 
-## Signature Verification Types
-- EIP712 - MetaMask Sign Typed Data v4. Currently represents the latest version of EIP712 spec. 
-
-### Verication-EIP712
-Current Blockchain Network support
-1. Rinkeby Test Network
-  - contract address: https://rinkeby.etherscan.io/address/0xdC56725aE658b7AE6110507Cec09E506bEEA8410
-2. Arbitrum Rinkeby
-  - contract address: https://rinkeby-explorer.arbitrum.io/address/0x0ECeF04E2686372e49C27343e1306d6674F782E5
-3. Mainnet Ethereum (coming soon)
-4. Arbitrum Mainnet (coming soon)
+## Ethereum account authenticator
+- Sign-In with Ethereum - https://github.com/spruceid/siwe
 
 ---
 
-## Cloud storage support(User Identity Management)
-- (coming soon)
+## Feautes
+- Sign in 
+- Sign up
+- ENS Resolution
+
 ---
 
 ## Install
@@ -52,54 +45,43 @@ List of components:
     size: PropTypes.oneOf(['small', 'medium', 'large']),
     verifyinglabel: PropTypes.string.isRequired,
     infuraId: PropTypes.string.isRequired,
+    dappname: PropTypes.string.isRequired,
+    disableErrorDisplay: PropTypes.bool
+    messageToSign: PropTypes.string,
+    logourl: PropTypes.string,
+    homePageurl: PropTypes.string
     passweb3data: PropTypes.func.isRequired,
     errorcallback: PropTypes.func.isRequired,
-    verificationtype: PropTypes.oneOf(['EIP712']),
-    dappname: PropTypes.string.isRequired,
-    logourl: PropTypes.string,
-    dappid: PropTypes.string,
-    homePageurl: PropTypes.string
   };
 ```
 Structure of data returned from Connection component (passweb3data callback)
 | Data | Data Type | Description
 | --- | --- | --- |
-| actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
-| verificationType | string | Signature type (EIP712)
-| networkName | string | Name of connected network
-| networkScanner | string | Block scanner URL for connected network
 | email | string | Account email address
-| provider | string | name of Wallet provider (metamask, wallet-connect)
+| address | string | Ethereum account
+| ens | string | Register ENS for Ethereum account
 | firstName | string | Account first name
 | lastName | string | Account last name
+| actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
+| networkName | string | Name of connected network
+| networkScanner | string | Block scanner URL for connected network
 | signature | object | Object that contains signature data
+| provideType | string | name of Wallet provider (metamask, wallet-connect)
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
 ```
 // example web3 data
 {
-  actionType: "SIGN_UP"
+  actionType: "SIGN_IN"
+  address: "0x6C18230EF8Bf455adDA98F5E3ABfe710bD8489C2"
+  chainId: 1
   email: "test_email@gmail.com"
-  firstName: "Idris"
-  lastName: "Bowman"
-  networkName: "Arbitrum Rinkeby"
-  networkScanner: "https://rinkeby-explorer.arbitrum.io/address"
-  provider: "metamask",
-  verificationType: "EIP712",
+  ens: ""
+  networkName: "Mainnet Ethereum"
+  networkScanner: "https://etherscan.io/address"
+  provider: "metamask"
+  verificationType: "SIWE"
+  signature: "fjsjbj2j2bj33333ff33ffdff43"
   web3Provider: {connection: {url: 'metamask'}...}
-  signature: {
-    account: "0xEc11b30ed0D77aA652b6Fa756C271a03877D150F"
-    chainId: 4
-    ens: "web3.eth"
-    expiration: 1641251976
-    isSigned: true
-    message: "Web3 Cloud wants to use your digital signature to sign into our dApp. Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. This signature will ONLY be used to sign you in and is set to expire in 2 minutes. Please be aware that signing will not cost any gas!"
-    nonce: "wbYho2YSKudoZnv3F"
-    r: "0x8f0f8bgdfdgd9909090ffdfddfde994492378bc83d28053ca4bed07fdf722680"
-    s: "0x61512a003d41fa094e13981f7f471c037245645454545454544545452278897b"
-    sigType: "EIP712"
-    url: "http://localhost:6006"
-    v: 27
-  }
 }
 ```
 
@@ -162,15 +144,15 @@ Structure of data returned from Connection component (errorcallback callback)
 
   <Connection
     primary={true}
-    backgroundcolor='blue'
+    backgroundcolor='green'
     size='large'
-    verifyinglabel='Verfiying Signature...'
-    verificationtype='EIP712'
+    verifyinglabel='Verifiying Signature...'
     dappname='Web3 Cloud'
-    dappid='my-dapp'
-    infuraId='27e484dcd9e3efcfd25a83a78777cdf1'
-    logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
-    homePageurl='https://idrisbowman.com'
+    infuraId='<your infura id>'
+    logourl='<your dapp logo image url>'
+    homePageurl='<your dapp home page url>'
+    disableErrorDisplay={false}
+    messageToSign={'Your message that users will sign'}
     passweb3data={web3DataCallback}
     errorcallback={web3ErrorCallback}
   />

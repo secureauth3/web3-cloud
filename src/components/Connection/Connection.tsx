@@ -27,12 +27,12 @@ export const Connection:FC<ConnectionProps> = ({
   verifyinglabel,
   passweb3data,
   errorcallback,
-  verificationtype,
   dappname,
   logourl,
-  dappid,
   infuraId,
   homePageurl,
+  disableErrorDisplay,
+  messageToSign,
   ...props
   }) => {
 
@@ -77,7 +77,7 @@ export const Connection:FC<ConnectionProps> = ({
     if(!isValidInput.valid) {
       const error: ErrorMessageData = {
         actionType: web3Values.actionType,
-        verificationType: verificationtype,
+        verificationType: VerifactionType.SIWE,
         message: `Invalid ${isValidInput.type} input for Connection component`
       }
       errorLogger(error);
@@ -91,36 +91,35 @@ export const Connection:FC<ConnectionProps> = ({
         provider: walletProvider,
       }));
 
-      // sign message and verify signature
-      const result = await web3Values.web3Service.signAuthMessage(
+      // set provider
+      const providerResult = await web3Values.web3Service.setProvider(
         walletProvider,
-        verificationtype,
-        web3Values.email,
-        dappname,
+        VerifactionType.SIWE,
         web3Values.actionType,
         infuraId
       );
 
-      if (!result) {
+      if (!providerResult) {
         const error: ErrorMessageData = {
           actionType: web3Values.actionType,
-          verificationType: verificationtype,
-          message: 'Error could not verify signature'
+          verificationType: VerifactionType.SIWE,
+          message: 'Error creating provider'
         }
         errorLogger(error);
         return;
       }
 
-      if(result.isVerified === false) {
-        const error: ErrorMessageData = {
-          actionType: web3Values.actionType,
-          verificationType: verificationtype,
-          message: 'Failed signature verifaction try a different account/and or email address.'
-        }
-        errorLogger(error);
-        return
-      }
+      // sign message with SIWE
+      const sigSIWE = await web3Values.web3Service.createSiweMessage(
+        providerResult.address,
+        messageToSign,
+        providerResult.chainId.toString(),
+        window.location.origin,
+        window.location.host,
+        providerResult.provider,
+      );
 
+      // update state to verifying
       setWeb3values((web3Values) => ({
         ...web3Values,
         providerSetOnClient: true,
@@ -134,23 +133,26 @@ export const Connection:FC<ConnectionProps> = ({
         lastNameInit: true,
         authErrMessage: '',
         isRenderVerifying: true,
-        web3Provider: result.web3Provider
+        web3Provider: providerResult.provider
       }));
 
       /*
         gather data
       */  
-      const networkName = CHAINID_NETWORK_MAP.get(result.chainId)?.name;
-      const scannerUrl = CHAINID_NETWORK_MAP.get(result.chainId)?.scannerUrl;
+      const networkName = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.name;
+      const scannerUrl = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.scannerUrl;
       const finalData: ActionData = {
           actionType: web3Values.actionType,
-          verificationType: verificationtype,
-          provider: walletProvider,
+          verificationType: VerifactionType.SIWE,
+          provideType: walletProvider,
           networkName: networkName != undefined? networkName : '',
           networkScanner: scannerUrl != undefined? scannerUrl : '',
           email: web3Values.email,
-          signature: result,
-          web3Provider: result.web3Provider
+          address: providerResult.address,
+          ens: providerResult.ens,
+          chainId: providerResult.chainId,
+          signature: sigSIWE,
+          web3Provider: providerResult.provider
       };
 
       switch(web3Values.actionType) {
@@ -180,14 +182,10 @@ export const Connection:FC<ConnectionProps> = ({
   }
 
   const checkInputValues = () => {
-    if(verificationtype !== VerifactionType.EIP712) {
-      return {type: 'verificationtype' , valid: false};
-    } else if (infuraId === '') {
+    if (infuraId === '') {
       return {type: 'infuraId' , valid: false};
     } else if (dappname === '') {
       return {type: 'dappname' , valid: false};
-    }  else if (dappid === '') {
-      return {type: 'dappid' , valid: false};
     } else if (verifyinglabel === '') {
       return {type: 'verifyinglabel' , valid: false};
     } else {
@@ -203,7 +201,8 @@ export const Connection:FC<ConnectionProps> = ({
       isVerifying: false,
       validSig: false,
       providerSetOnClient: false,
-      authErrMessage: error.message
+      authErrMessage: error.message,
+      showConnectAccountModal: false
     }));
   }
 
@@ -261,7 +260,7 @@ export const Connection:FC<ConnectionProps> = ({
           <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
-          {!web3Values.validSig &&(
+          {!web3Values.validSig && !disableErrorDisplay &&(
             <p className="form-text text-muted web3-cloud-invalid">{web3Values.authErrMessage}</p>
           )}
           <button
@@ -285,7 +284,7 @@ export const Connection:FC<ConnectionProps> = ({
           <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
-          {!web3Values.validSig &&(
+          {!web3Values.validSig && !disableErrorDisplay &&(
             <p className="form-text text-muted web3-cloud-invalid">{web3Values.authErrMessage}</p>
           )}
           <button
@@ -399,7 +398,7 @@ Connection.defaultProps = {
   backgroundcolor: 'blue',
   primary: true,
   size: 'large',
-  verificationtype: 'EIP712',
+  messageToSign:`Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. Please be aware that signing will not cost any gas!`,
   logourl: 'https://idrisbowman.com/images/idrisBowmanIcon.jpg',
   homePageurl: 'https://idrisbowman.com/'
 };

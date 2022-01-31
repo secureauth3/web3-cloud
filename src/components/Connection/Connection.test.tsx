@@ -14,9 +14,7 @@ describe("Connection", () => {
             backgroundcolor='blue'
             size='large'
             verifyinglabel='Verfiying Signature...'
-            verificationtype='EIP712'
             dappname='Web3 Cloud'
-            dappid='my-dapp'
             homePageurl='https://idrisbowman.com/'
             logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
             passweb3data={((web3Values: ActionData) => {
@@ -24,7 +22,10 @@ describe("Connection", () => {
             })}
             errorcallback={((error: ErrorMessageData) => {
                 errorObject = error;
-            })} infuraId={''}            
-        />);
+            })} 
+            infuraId={''}
+            disableErrorDisplay={false}
+            messageToSign={""} 
+            />);
     });
 });

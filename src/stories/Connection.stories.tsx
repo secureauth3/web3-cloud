@@ -20,12 +20,12 @@ const createUser = async (web3Values: ActionData) => {
    headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
    body: JSON.stringify(
      { 
-       account: web3Values.signature?.account,
+       account: web3Values.address,
        email: web3Values.email,
        firstName: web3Values.firstName,
        lastName: web3Values.lastName,
-       ens: web3Values.signature?.ens,
-       chainId: web3Values.signature?.chainId,
+       ens: web3Values.ens,
+       chainId: web3Values.chainId,
      }
    )
  };
@@ -90,11 +90,11 @@ const getUserData = async (accessToken: string, web3Values: ActionData) => {
    };
 
  let userData;
- await fetch(`${API_URL}/api/v1/users/${web3Values.signature?.account}`, requestOptionsGetUser)
+ await fetch(`${API_URL}/api/v1/users/${web3Values.address}`, requestOptionsGetUser)
    .then(response => response.json())
    .then(data => {
      userData = data;
-     console.log(`result get users/${web3Values.signature?.account}:`, data);
+     console.log(`result get users/${web3Values.address}:`, data);
  });
  return userData;
 }
@@ -109,11 +109,11 @@ const getOwnerData = async (accessToken: string, web3Values: ActionData) => {
   };
 
 let ownerData;
-await fetch(`${API_URL}/api/v1/owners/${web3Values.signature?.account}`, requestOptionsGetUser)
+await fetch(`${API_URL}/api/v1/owners/${web3Values.address}`, requestOptionsGetUser)
   .then(response => response.json())
   .then(data => {
     ownerData = data;
-    console.log(`result get owners/${web3Values.signature?.account}:`, data);
+    console.log(`result get owners/${web3Values.address}:`, data);
 });
 return ownerData;
 }
@@ -129,7 +129,7 @@ const patchUserData = async (accessToken: string, web3Values: ActionData) => {
     )
   };
     
-  await fetch(`${API_URL}/api/v1/users/${web3Values.signature?.account}`, requestOptionsPatch)
+  await fetch(`${API_URL}/api/v1/users/${web3Values.address}`, requestOptionsPatch)
   .then(response => {
     console.log('result patch api/v1/users:', response);
   });
@@ -154,7 +154,7 @@ const putUserData = async (accessToken: string, web3Values: ActionData) => {
     )
   };
   
-  await fetch(`${API_URL}/api/v1/users/${web3Values.signature?.account}`, requestOptionsAuth)
+  await fetch(`${API_URL}/api/v1/users/${web3Values.address}`, requestOptionsAuth)
     .then(response => {
       console.log('result put api/v1/users:', response);
     });
@@ -169,9 +169,9 @@ const deleteUserData = async (accessToken: string, web3Values: ActionData) => {
       },
   };
 
-await fetch(`${API_URL}/api/v1/users/${web3Values.signature?.account}`, requestOptionsGetUser)
+await fetch(`${API_URL}/api/v1/users/${web3Values.address}`, requestOptionsGetUser)
   .then(response => {
-    console.log(`result dekete users/${web3Values.signature?.account}:`, response);
+    console.log(`result dekete users/${web3Values.address}:`, response);
   });
 }
 
@@ -222,12 +222,12 @@ const Template: ComponentStory<typeof Connection> = (args: ConnectionProps) =>
       backgroundcolor='green'
       size='large'
       verifyinglabel='Verifiying Signature...'
-      verificationtype='EIP712'
       dappname='Web3 Cloud'
-      dappid='my-dapp'
       infuraId=''
       logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
       homePageurl='https://idrisbowman.com/'
+      disableErrorDisplay={false}
+      messageToSign={`Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. Please be aware that signing will not cost any gas!`}
       passweb3data={(async (web3Values: ActionData) => {
         web3data = web3Values;
         // try {
@@ -278,27 +278,21 @@ export const web3DataContainer = () =>
     {web3data && web3data.verificationType === 'EIP712'?
        <div>
          <h1>EIP712 Verification Type Data</h1>
-       <a href={`${web3data.networkScanner}/${web3data.signature?.account}`} target="_blank" rel="noopener noreferrer">
-         Ethereum Account: {web3data.signature?.account}
+       <a href={`${web3data.networkScanner}/${web3data.address}`} target="_blank" rel="noopener noreferrer">
+         Ethereum Account: {web3data.address}
        </a> 
        <p>Email: {web3data.email}</p>
        <p>First Name: {web3data.firstName}</p>
        <p>Last Name: {web3data.lastName}</p>
        <p>Network: {web3data.networkName}</p>
-       <p>NetworkID: {web3data.signature?.chainId}</p>
+       <p>NetworkID: {web3data.chainId}</p>
        <p>Action Type: {web3data.actionType}</p>
        <hr></hr>
        <p>Signature data</p>
-       <p>Signature v: {web3data.signature?.v}</p>
-       <p>Signature r: {web3data.signature?.r}</p>
-       <p>Signature S: {web3data.signature?.s}</p>
-       <p>Signature message: {web3data.signature?.message}</p>
-       <p>Signature url: {web3data.signature?.url}</p>
-       <p>Signature nonce: {web3data.signature?.nonce}</p>
-       <p>Date when signauture expires: {web3data.signature?.expiration}</p>
+       <p>Signatur: {web3data.signature}</p>
      </div>
       :
-      <p>Please connect wallet to view EIP712</p>
+      <p>Please connect wallet to view Sing in with Ethereum</p>
     }
 
   {/* Error messages */}

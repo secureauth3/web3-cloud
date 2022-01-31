@@ -1,23 +1,4 @@
-import { Contracts, NetworkInfo } from '../interface/signature-interface';
-
-export const SUPPORTED_NETWORKS = [4, 421611];
-
-export const VERIFICATION_CONTRACTS = new Map<number,Contracts>([
-    [4, {
-        'EIP712': {
-            address: '0xdC56725aE658b7AE6110507Cec09E506bEEA8410',
-            abi: ['function verify(uint8 v, bytes32 r, bytes32 s, string memory action, address sender, string memory email, string memory url, string nonce, uint256 expiration) public view returns (bool)']
-        },
-
-    }],
-    [421611, {
-        'EIP712': {
-            address: '0x0ECeF04E2686372e49C27343e1306d6674F782E5',
-            abi: ['function verify(uint8 v, bytes32 r, bytes32 s, string memory action, address sender, string memory email, string memory url, string nonce, uint256 expiration) public view returns (bool)']
-            },
-        }
-    ],
-]);
+import { NetworkInfo } from '../interface/signature-interface';
 
 export const CHAINID_NETWORK_MAP = new Map<number, NetworkInfo>([
     [1, {
