@@ -65,7 +65,8 @@ Structure of data returned from Connection component (passweb3data callback)
 | actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
 | networkName | string | Name of connected network
 | networkScanner | string | Block scanner URL for connected network
-| signature | object | Object that contains signature data
+| signature | string | String that contains signature data
+| message | string | String that contains message that account signed
 | provideType | string | name of Wallet provider (metamask, wallet-connect)
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
 ```
@@ -81,6 +82,7 @@ Structure of data returned from Connection component (passweb3data callback)
   provider: "metamask"
   verificationType: "SIWE"
   signature: "fjsjbj2j2bj33333ff33ffdff43"
+  message: "<message that was signed>"
   web3Provider: {connection: {url: 'metamask'}...}
 }
 ```

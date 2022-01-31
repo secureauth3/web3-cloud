@@ -13,6 +13,7 @@ export interface ActionData {
     email: string;
     firstName?: string;
     lastName?: string;
+    message: string;
     web3Provider: ethers.providers.Web3Provider | null;
 }
   

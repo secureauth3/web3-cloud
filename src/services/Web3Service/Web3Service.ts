@@ -120,6 +120,9 @@ export class Web3Service {
 
         const messageToSign = siweMessage.prepareMessage();
         const signature = await provider.getSigner().signMessage(messageToSign);
-        return signature;
+        return {
+            signature: signature,
+            message: messageToSign
+        };
     }
 }

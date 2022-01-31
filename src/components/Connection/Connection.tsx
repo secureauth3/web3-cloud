@@ -151,7 +151,8 @@ export const Connection:FC<ConnectionProps> = ({
           address: providerResult.address,
           ens: providerResult.ens,
           chainId: providerResult.chainId,
-          signature: sigSIWE,
+          signature: sigSIWE.signature,
+          message: sigSIWE.message,
           web3Provider: providerResult.provider
       };
 
