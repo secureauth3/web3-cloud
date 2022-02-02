@@ -11,7 +11,7 @@ export default {
 
 let web3data: ActionData;
 let errorObject: ErrorMessageData;
-let API_URL: string = '';
+let API_URL: string = 'http://localhost:80';
 const apiKey = '';
 
 const createUser = async (web3Values: ActionData) => {
@@ -213,11 +213,10 @@ const getOwnerAllData = async (accessToken: string, web3Values: ActionData) => {
   return userData;
 }
 
-
 // test web3 connection component
 const Template: ComponentStory<typeof Connection> = (args: ConnectionProps) =>
   <div>
-    <Connection
+      <Connection
       primary={true}
       backgroundcolor='green'
       size='large'
@@ -227,6 +226,15 @@ const Template: ComponentStory<typeof Connection> = (args: ConnectionProps) =>
       logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
       homePageurl='https://idrisbowman.com/'
       disableErrorDisplay={false}
+      backend={{
+        endpoint: 'http://localhost:80/api/v1/auth/nonce',
+        requestOptions: {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`
+          }
+        }
+      }}
       messageToSign={`Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. Please be aware that signing will not cost any gas!`}
       passweb3data={(async (web3Values: ActionData) => {
         web3data = web3Values;

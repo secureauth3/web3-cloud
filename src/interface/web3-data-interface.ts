@@ -14,6 +14,7 @@ export interface ActionData {
     firstName?: string;
     lastName?: string;
     message: string;
+    nonceSetFromBackend: boolean;
     web3Provider: ethers.providers.Web3Provider | null;
 }
   
@@ -21,6 +22,14 @@ export interface ErrorMessageData {
     actionType: string;
     verificationType: string;
     message: string;
+}
+
+export interface Backend {
+    endpoint: string,
+    requestOptions: {
+        method: string,
+        headers?: any
+    }
 }
 
 export const enum ACTION_TPYE {

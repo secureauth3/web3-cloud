@@ -33,6 +33,7 @@ export const Connection:FC<ConnectionProps> = ({
   homePageurl,
   disableErrorDisplay,
   messageToSign,
+  backend,
   ...props
   }) => {
 
@@ -117,6 +118,7 @@ export const Connection:FC<ConnectionProps> = ({
         window.location.origin,
         window.location.host,
         providerResult.provider,
+        backend,
       );
 
       // update state to verifying
@@ -153,6 +155,7 @@ export const Connection:FC<ConnectionProps> = ({
           chainId: providerResult.chainId,
           signature: sigSIWE.signature,
           message: sigSIWE.message,
+          nonceSetFromBackend: sigSIWE.nonceSetFromBackend,
           web3Provider: providerResult.provider
       };
 

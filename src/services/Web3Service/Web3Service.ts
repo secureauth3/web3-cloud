@@ -1,7 +1,8 @@
 import { ethers, providers } from 'ethers';
-import { ErrorMessageData, Providers } from '../../interface/web3-data-interface';
+import { Backend, ErrorMessageData, Providers } from '../../interface/web3-data-interface';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { SiweMessage } from 'siwe';
+import { fetchNonce } from './web3API';
 
 const metamask = window.ethereum;
 
@@ -108,21 +109,42 @@ export class Web3Service {
         origin: string,
         doamin: string,
         provider: ethers.providers.Web3Provider,
+        backend: Backend | undefined
         ) {
-        const siweMessage = new SiweMessage({
-            domain: doamin,
-            address,
-            statement,
-            uri: origin,
-            version: '1',
-            chainId: chainId
-        });
+        let siweMessage;
+        let nonce = '';
+
+        if (backend) {
+            const res = await fetchNonce(backend);
+            nonce = res.nonce;
+        }
+        if (nonce !== '') {
+            siweMessage = new SiweMessage({
+                domain: doamin,
+                address,
+                statement,
+                uri: origin,
+                version: '1',
+                chainId: chainId,
+                nonce: nonce
+            });
+        } else {
+            siweMessage = new SiweMessage({
+                domain: doamin,
+                address,
+                statement,
+                uri: origin,
+                version: '1',
+                chainId: chainId
+            });
+        }
 
         const messageToSign = siweMessage.prepareMessage();
         const signature = await provider.getSigner().signMessage(messageToSign);
         return {
             signature: signature,
-            message: messageToSign
+            message: messageToSign,
+            nonceSetFromBackend: nonce !==''? true : false
         };
     }
 }

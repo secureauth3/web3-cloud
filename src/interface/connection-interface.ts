@@ -1,7 +1,7 @@
-import { ActionData, ErrorMessageData } from "./web3-data-interface";
+import { ActionData, Backend, ErrorMessageData } from "./web3-data-interface";
 
 export interface ConnectionProps {
-    primary: any;
+    primary: boolean;
     backgroundcolor: string; 
     size: string; 
     verifyinglabel: string;
@@ -13,4 +13,5 @@ export interface ConnectionProps {
     homePageurl: string;
     disableErrorDisplay: boolean;
     messageToSign: string;
+    backend?: Backend
 }
