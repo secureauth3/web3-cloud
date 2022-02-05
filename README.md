@@ -11,8 +11,8 @@ Web3-Cloud is a React component library designed to create simple secure User Si
 
 
 ## Quick start application
-repo: https://github.com/V00D00-child/web3-cloud-quick-start
-view live: https://www.findmynft.org/
+- repo: https://github.com/V00D00-child/web3-cloud-quick-start
+- view live: https://www.findmynft.org/
 
 ## Requirements
 - 4.14.0 of MetaMask
