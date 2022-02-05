@@ -9,6 +9,11 @@ Web3-Cloud is a React component library designed to create simple secure User Si
 ## Device support
 (Desktop, tablet, Mobile)
 
+
+## Quick start application
+repo: https://github.com/V00D00-child/web3-cloud-quick-start
+view live: https://www.findmynft.org/
+
 ## Requirements
 - 4.14.0 of MetaMask
 - Infura Project Id (https://infura.io/)
@@ -22,7 +27,7 @@ Web3-Cloud is a React component library designed to create simple secure User Si
 
 ---
 
-## Feautes
+## Features
 1. Sign in 
 2. Sign up
 3. ENS Resolution
