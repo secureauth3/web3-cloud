@@ -201,15 +201,6 @@ Structure of data returned from Connection component (errorcallback callback)
     homePageurl='<your dapp home page url>'
     disableErrorDisplay={false}
     messageToSign={'Your message that users will sign'}
-    backend={{
-        endpoint: 'https://my.api.com/nonce',
-        requestOptions: {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`
-          }
-        }
-      }}
     passweb3data={web3DataCallback}
     errorcallback={web3ErrorCallback}
   />
