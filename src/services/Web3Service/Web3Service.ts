@@ -113,6 +113,7 @@ export class Web3Service {
         ) {
         let siweMessage;
         let nonce = '';
+        const messageExpirationTime = new Date((Date.now() + (600000))).toISOString(); // signature expires in 10 mins
 
         if (backend) {
             const res = await fetchNonce(backend);
@@ -126,7 +127,8 @@ export class Web3Service {
                 uri: origin,
                 version: '1',
                 chainId: chainId,
-                nonce: nonce
+                nonce: nonce,
+                expirationTime: messageExpirationTime
             });
         } else {
             siweMessage = new SiweMessage({
@@ -135,7 +137,8 @@ export class Web3Service {
                 statement,
                 uri: origin,
                 version: '1',
-                chainId: chainId
+                chainId: chainId,
+                expirationTime: messageExpirationTime
             });
         }
 

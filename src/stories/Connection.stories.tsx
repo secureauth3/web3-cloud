@@ -227,7 +227,7 @@ const Template: ComponentStory<typeof Connection> = (args: ConnectionProps) =>
       homePageurl='https://idrisbowman.com/'
       disableErrorDisplay={false}
       backend={{
-        endpoint: 'http://localhost:80/api/v1/auth/nonce',
+        endpoint: 'http://localhost:8080/api/v1/auth/nonce',
         requestOptions: {
           method: 'GET',
           headers: {
