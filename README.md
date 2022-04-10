@@ -2,17 +2,20 @@
 
 Simple Sign-up, Sign In Ethereum account authenticator. Power by Sign-In with Ethereum.
 
-Web3-Cloud is a React component library designed to create simple secure User Sign-up, Sign In. Letting a user’s Ethereum wallet become an extension of their digital identity without the need for legacy password ownership models. 
+Web3-Cloud is a React component library designed to create simple secure User Sign-up, Sign In. Generate [EIP-1271 signatures](https://eips.ethereum.org/EIPS/eip-1271)
+
+## Coming soon(Join waiting list)
+[Secure Auth3](https://www.secureauth3.com/)
+The perfect solution for Developers who want integrate Web3 sign-in/sign-up into their applications. Auth3 API was built to provide a new web3 authentication model that give users more control over their digital identity without the need for legacy password ownership models.
 
 ---
-
-## Device support
-(Desktop, tablet, Mobile)
-
 
 ## Quick start application
 - repo: https://github.com/V00D00-child/web3-cloud-quick-start
 - view live: https://www.findmynft.org/
+
+## Device support
+(Desktop, tablet, Mobile)
 
 ## Requirements
 - 4.14.0 of MetaMask
@@ -22,29 +25,27 @@ Web3-Cloud is a React component library designed to create simple secure User Si
 - react-dom - 17.0.2 (https://www.npmjs.com/package/react-dom)
 ---
 
-## Ethereum account authenticator
-- Sign-In with Ethereum - https://github.com/spruceid/siwe
-
----
-
-## Features
-1. Sign in 
-2. Sign up
-3. ENS Resolution
-4. (Optional)Fetch nonce from backend server(Sign-In with Ethereum)
-     - Follow recommended documention for fetching nonce from a backend server (https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/implement-the-backend)
-
----
-
 ## Install
 
 ```
 $ npm install web3-cloud
 ```
 
-## Usage 
-List of components:
-- Connection - Dapp UI Connection component for user interaction with Ethereum wallet
+## List of components  
+- Connection component
+- Single Sign on button component (coming soon)
+- Web3 Authentication provider component (coming soon)
+### Connection component 
+- Description: Dapp UI Connection component for Ethereum wallet sign in/sign up
+- Features:
+  1. Sign in/Sign up: Responsive Form with validation (email, first name, last name)
+  2. ENS Resolution
+  3. (Optional)Fetch nonce from backend server(Sign-In with Ethereum)
+      - Follow recommended documention for fetching nonce from a backend server (https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/implement-the-backend)
+  4. (EIP-1271 signatures) Sign-In with Ethereum - https://github.com/spruceid/siwe
+  5. Sign message with nonces
+  6. Signature expiration time: 10 mins
+
 ```typescript
 // Connection component prop types 
 interface ConnectionProps {
@@ -124,7 +125,7 @@ Structure of data returned from Connection component (errorcallback callback)
 }
 ```
 
-### Connection Component
+### Usage
 1. Add imports for web3-cloud and useCallback (react hooks)
  ```typescript
  import { Connection } from "web3-cloud";
@@ -164,7 +165,7 @@ Structure of data returned from Connection component (errorcallback callback)
   }, []);
 
 
-// Option 1 - With backend
+// Option 1 - With nonce backend
   <Connection
     primary={true}
     backgroundcolor='green'
@@ -189,7 +190,7 @@ Structure of data returned from Connection component (errorcallback callback)
     errorcallback={web3ErrorCallback}
   />
 
-  // Option 2 - Without backend 
+  // Option 2 - Without nonce backend 
   <Connection
     primary={true}
     backgroundcolor='green'
