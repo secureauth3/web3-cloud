@@ -2,14 +2,14 @@ import React from "react";
 import { render } from "@testing-library/react";
 import "regenerator-runtime/runtime.js";
 import { ActionData, ErrorMessageData } from "../../interface/web3-data-interface";
-import { Connection } from "./Connection";
+import { Form } from "./Form";
 
-describe("Connection", () => {
+describe("Form", () => {
     let web3data: ActionData;
     let errorObject: ErrorMessageData;
 
-    test("renders the Connection component", () => {
-        render(<Connection
+    test("renders the Form component", () => {
+        render(<Form
             primary={true}
             backgroundcolor='blue'
             size='large'

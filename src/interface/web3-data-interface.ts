@@ -34,7 +34,8 @@ export interface Backend {
 
 export const enum ACTION_TPYE {
     SIGN_UP = 'SIGN_UP',
-    SIGN_IN = 'SIGN_IN'
+    SIGN_IN = 'SIGN_IN',
+    BUTTON_SIGN = 'BUTTON_SIGN'
 };
 
 export const enum Providers {

@@ -1,6 +1,6 @@
 import { ActionData, Backend, ErrorMessageData } from "./web3-data-interface";
 
-export interface ConnectionProps {
+export interface FormProps {
     primary: boolean;
     backgroundcolor: string; 
     size: string; 

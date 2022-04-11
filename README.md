@@ -32,11 +32,11 @@ $ npm install web3-cloud
 ```
 
 ## List of components  
-- Connection component
+- Form component
 - Single Sign on button component (coming soon)
 - Web3 Authentication provider component (coming soon)
-### Connection component 
-- Description: Dapp UI Connection component for Ethereum wallet sign in/sign up
+### Form component 
+- Description: Dapp UI Form component for Ethereum wallet sign in/sign up
 - Features:
   1. Sign in/Sign up: Responsive Form with validation (email, first name, last name)
   2. ENS Resolution
@@ -47,8 +47,8 @@ $ npm install web3-cloud
   6. Signature expiration time: 10 mins
 
 ```typescript
-// Connection component prop types 
-interface ConnectionProps {
+// Form component prop types 
+interface FormProps {
   primary: boolean;
   backgroundcolor: string; 
   size: string; 
@@ -73,7 +73,7 @@ interface Backend {
 }
 ```
 
-Structure of data returned from Connection component (passweb3data: ActionData)
+Structure of data returned from Form component (passweb3data: ActionData)
 | Data | Data Type | Description
 | --- | --- | --- |
 | email | string | Account email address
@@ -109,7 +109,7 @@ Structure of data returned from Connection component (passweb3data: ActionData)
 }
 ```
 
-Structure of data returned from Connection component (errorcallback callback)
+Structure of data returned from Form component (errorcallback callback)
 | Data | Data Type | Description
 | --- | --- | --- |
 | actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
@@ -128,7 +128,7 @@ Structure of data returned from Connection component (errorcallback callback)
 ### Usage
 1. Add imports for web3-cloud and useCallback (react hooks)
  ```typescript
- import { Connection } from "web3-cloud";
+ import { Form } from "web3-cloud";
  import { useCallback } from "react";
 ```
 
@@ -166,7 +166,7 @@ Structure of data returned from Connection component (errorcallback callback)
 
 
 // Option 1 - With nonce backend
-  <Connection
+  <Form
     primary={true}
     backgroundcolor='green'
     size='large'
@@ -191,7 +191,7 @@ Structure of data returned from Connection component (errorcallback callback)
   />
 
   // Option 2 - Without nonce backend 
-  <Connection
+  <Form
     primary={true}
     backgroundcolor='green'
     size='large'

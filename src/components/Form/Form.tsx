@@ -1,12 +1,15 @@
 import React, {useState, FC } from "react";
-import { ConnectionProps } from "../../interface/connection-interface";
+import Modal from 'react-modal';
+
+import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
 import { Web3Service } from "../../services/Web3Service/Web3Service";
 import { ActionData, ACTION_TPYE, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
-import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
-import Modal from 'react-modal';
+import { FormProps } from '../../interface/form-interface';
+
 import metamaskLogo from '../../assets/metamask.png';
 import walletConnectLogo from '../../assets/walletConnect.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './Form.css';
 import '../../styles.css';
 
 declare global {
@@ -17,10 +20,9 @@ declare global {
 }
 
 /**
- * Dapp UI Connection component for user interaction with Ethereum wallet
+ * Dapp UI Form component for user interaction with Ethereum wallet
  */
-Modal.setAppElement('#root');
-export const Connection:FC<ConnectionProps> = ({
+export const Form:FC<FormProps> = ({
   primary,
   backgroundcolor, 
   size, 
@@ -54,7 +56,9 @@ export const Connection:FC<ConnectionProps> = ({
     firstName: '',
     lastName: '',
     isRenderSignUp: true,
-    isRenderVerifying: false,
+    emailInit: true,
+    firstNameInit: true,
+    lastNameInit: true,
     authErrMessage: '',
     showConnectAccountModal: false,
     showWalletInfo: false,
@@ -121,25 +125,18 @@ export const Connection:FC<ConnectionProps> = ({
         backend,
       );
 
-      // update state to verifying
+      // close modal and update state to provider state
       setWeb3values((web3Values) => ({
         ...web3Values,
         providerSetOnClient: true,
         showConnectAccountModal: false,
         validSig: true,
-        email: '',
-        firstName: '',
-        lastName: '',
-        emailInit: true,
-        firstNameInit: true,
-        lastNameInit: true,
         authErrMessage: '',
-        isRenderVerifying: true,
         web3Provider: providerResult.provider
       }));
 
       /*
-        gather data
+        gather and send data
       */  
       const networkName = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.name;
       const scannerUrl = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.scannerUrl;
@@ -201,12 +198,20 @@ export const Connection:FC<ConnectionProps> = ({
     errorcallback(error);
     setWeb3values((web3Values) => ({
       ...web3Values,
-      connected: false,
-      isVerifying: false,
-      validSig: false,
       providerSetOnClient: false,
+      validSig: false,
+      isVerifying: false,
+      provider: '',
+      email: '',
+      firstName: '',
+      lastName: '',
+      emailInit: true,
+      firstNameInit: true,
+      lastNameInit: true,
       authErrMessage: error.message,
-      showConnectAccountModal: false
+      showConnectAccountModal: false,
+      showWalletInfo: false,
+      actionType: '',
     }));
   }
 
@@ -237,17 +242,21 @@ export const Connection:FC<ConnectionProps> = ({
   const doToggleViews = () => {
     setWeb3values((web3Values) => ({
       ...web3Values,
-      connected: false,
-      isVerifying: false,
+      providerSetOnClient: false,
       validSig: false,
+      isVerifying: false,
+      provider: '',
       email: '',
       firstName: '',
       lastName: '',
+      isRenderSignUp: !web3Values.isRenderSignUp,
       emailInit: true,
       firstNameInit: true,
       lastNameInit: true,
-      isRenderSignUp: !web3Values.isRenderSignUp,
-      authErrMessage: ''
+      authErrMessage: '',
+      showConnectAccountModal: false,
+      showWalletInfo: false,
+      actionType: '',
     }));
   }
 
@@ -264,9 +273,6 @@ export const Connection:FC<ConnectionProps> = ({
           <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
-          {!web3Values.validSig && !disableErrorDisplay &&(
-            <p className="form-text text-muted web3-cloud-invalid">{web3Values.authErrMessage}</p>
-          )}
           <button
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
@@ -276,6 +282,9 @@ export const Connection:FC<ConnectionProps> = ({
             Sign up with a Wallet
           </button>
           <p>Already have an account? <span className="web3-cloud-signin-toggle" onClick={doToggleViews} style={likStlye}>Sign in</span></p>
+          {!web3Values.validSig && !disableErrorDisplay &&(
+            <p className="form-text web3-cloud-invalid">{web3Values.authErrMessage}</p>
+          )}
         </div>
       </form>
     );
@@ -288,9 +297,7 @@ export const Connection:FC<ConnectionProps> = ({
           <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
-          {!web3Values.validSig && !disableErrorDisplay &&(
-            <p className="form-text text-muted web3-cloud-invalid">{web3Values.authErrMessage}</p>
-          )}
+         
           <button
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
@@ -299,50 +306,44 @@ export const Connection:FC<ConnectionProps> = ({
             Sign in with a Wallet
           </button>
           <p>Don't have an account? <span className="web3-cloud-signin-toggle" onClick={doToggleViews} style={likStlye}>Sign up</span></p>
+          {!web3Values.validSig && !disableErrorDisplay &&(
+            <p className="form-text web3-cloud-invalid">{web3Values.authErrMessage}</p>
+          )}
         </div>
       </form>
-    );
-  }
-
-  const renderVerifyingView = () => {
-    return (
-      <p className="web3-cloud-verifyinglabel">{verifyinglabel}</p>
     );
   }
 
   return (
     <div className="card web3-cloud-sign-in-container">
         <div className="web3-cloud-form-container">
-          {web3Values.isRenderVerifying ?
-            <div>{renderVerifyingView()}</div>
-          :
-            <div>
-              <header>
-                <img src={logourl} alt="profile-img" className="web3-cloud-profile-img-card" onClick={
-                 (e) => {
+          <div>
+            <header>
+              <img src={logourl} alt="profile-img" className="web3-cloud-profile-img-card" onClick={
+                (e) => {
+                e.preventDefault();
+                window.open(homePageurl, "_self")
+                }
+              }/>
+              <h1 className="web3-cloud-dapp-name"
+              onClick={
+                (e) => {
                   e.preventDefault();
                   window.open(homePageurl, "_self")
-                 }
-                }/>
-                <h1 className="web3-cloud-dapp-name"
-                onClick={
-                  (e) => {
-                   e.preventDefault();
-                   window.open(homePageurl, "_self")
-                  }
-                 }>{dappname}</h1>
-              </header>
-              {web3Values.isRenderSignUp ? 
-              <div>{renderSignUpView()}</div>
-                :
-              <div>{renderSignInView()}</div>
-              }
-            </div>
-          }
+                }
+                }>{dappname}</h1>
+            </header>
+            {web3Values.isRenderSignUp ? 
+            <div>{renderSignUpView()}</div>
+              :
+            <div>{renderSignInView()}</div>
+            }
+          </div>
         </div>
         <Modal id="modal-connect" 
           shouldCloseOnEsc={true}
           shouldCloseOnOverlayClick={true}
+          ariaHideApp={false}
           onRequestClose={(e) => { setWeb3values((web3Values) => ({
             ...web3Values,
             showConnectAccountModal: !web3Values.showConnectAccountModal
@@ -398,7 +399,7 @@ export const Connection:FC<ConnectionProps> = ({
   );
 };
 
-Connection.defaultProps = {
+Form.defaultProps = {
   backgroundcolor: 'blue',
   primary: true,
   size: 'large',

@@ -1,0 +1,71 @@
+/* Sign in/Sign up forms */
+.web3-cloud-sign-in-container {
+    width: 100%;
+    margin: auto;
+    box-shadow: 0px 2px 2px rgb(0 0 0 / 30%);
+    padding: 5%;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 1.25rem !important;
+}
+  
+.web3-cloud-email{
+    margin-bottom: 10%;
+    margin-top: 10%;
+}
+  
+.web3-cloud-profile-img-card {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.web3-cloud-profile-img-card:hover {
+    cursor: pointer;    
+}
+
+.web3-cloud-signin-toggle {
+    margin-top: 2%;
+    text-decoration: underline;
+}
+
+.web3-cloud-signin-toggle:hover {
+    cursor: pointer;
+}
+
+.web3-cloud-dapp-name {
+    color: black;
+}
+
+.web3-cloud-dapp-name:hover {
+    cursor: pointer;
+}
+
+.web3-cloud-verifyinglabel {
+    color: black;
+}
+
+/* Tablet styling */
+@media only screen and (min-width: 768px) {
+    .web3-cloud-sign-in-container {
+      width: 50%;
+    }
+  }
+  
+  /* Desktop styling */
+  @media only screen and (min-width: 1024px) {
+    .web3-cloud-sign-in-container {
+      width: 40%;
+    }
+  }
+  
+  /* Desktop Large styling */
+  @media only screen and (min-width: 1440px) {
+    .web3-cloud-sign-in-container {
+        width: 30%;
+    }
+}
