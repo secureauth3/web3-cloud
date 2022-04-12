@@ -142,12 +142,16 @@ export class Web3Service {
             });
         }
 
-        const messageToSign = siweMessage.prepareMessage();
-        const signature = await provider.getSigner().signMessage(messageToSign);
-        return {
-            signature: signature,
-            message: messageToSign,
-            nonceSetFromBackend: nonce !==''? true : false
-        };
+        try {
+            const messageToSign = siweMessage.prepareMessage();
+            const signature = await provider.getSigner().signMessage(messageToSign);
+            return {
+                signature: signature,
+                message: messageToSign,
+                nonceSetFromBackend: nonce !==''? true : false
+            };
+        } catch (err) {
+            throw err;
+        }
     }
 }

@@ -32,11 +32,11 @@ $ npm install web3-cloud
 ```
 
 ## List of components  
-- Connection component
-- Single Sign on button component (coming soon)
+- Form component
+- Single Sign on button component
 - Web3 Authentication provider component (coming soon)
-### Connection component 
-- Description: Dapp UI Connection component for Ethereum wallet sign in/sign up
+### Form component 
+- Description: Dapp UI Form component for Ethereum wallet sign in/sign up
 - Features:
   1. Sign in/Sign up: Responsive Form with validation (email, first name, last name)
   2. ENS Resolution
@@ -47,14 +47,13 @@ $ npm install web3-cloud
   6. Signature expiration time: 10 mins
 
 ```typescript
-// Connection component prop types 
-interface ConnectionProps {
+// Form component prop types 
+interface FormProps {
   primary: boolean;
   backgroundcolor: string; 
   size: string; 
-  verifyinglabel: string;
-  passweb3data: (web3Data: ActionData) => void;
-  errorcallback: (errorData: ErrorMessageData) => void;
+  formDataCallback: (web3Data: FormSignatureData) => void;
+  formErrorCallback: (errorData: ErrorMessageData) => void;
   dappname: string;
   logourl: string;
   infuraId: string;
@@ -67,13 +66,40 @@ interface ConnectionProps {
 interface Backend {
   endpoint: string,
   requestOptions: {
-      method: string,
-      headers?: any
+    method: string,
+    headers?: any
   }
+}
+
+
+// Form component signature callback data types 
+interface FormSignatureData {
+  actionType: string;
+  verificationType: string;
+  networkName: string;
+  provideType: string;
+  networkScanner: string;
+  signature: string;
+  chainId: number;
+  address: string;
+  ens: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  message: string;
+  nonceSetFromBackend: boolean;
+  web3Provider: ethers.providers.Web3Provider | null;
+}
+
+// Form component error callback data types
+interface ErrorMessageData {
+  actionType: string;
+  verificationType: string;
+  message: string;
 }
 ```
 
-Structure of data returned from Connection component (passweb3data: ActionData)
+Form component of callback data (FormSignatureData)
 | Data | Data Type | Description
 | --- | --- | --- |
 | email | string | Account email address
@@ -81,7 +107,7 @@ Structure of data returned from Connection component (passweb3data: ActionData)
 | ens | string | Register ENS for Ethereum account
 | firstName | string | Account first name
 | lastName | string | Account last name
-| actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
+| actionType | string | Type of authentication (SIGN_UP, SIGN_IN, BUTTON_SIGN) 
 | networkName | string | Name of connected network
 | networkScanner | string | Block scanner URL for connected network
 | signature | string | String that contains signature data
@@ -90,68 +116,41 @@ Structure of data returned from Connection component (passweb3data: ActionData)
 | nonceSetFromBackend | boolean | set to true when nonce in message comes from backend endpoint
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
 
-```javascript
-// example web3 data
-{
-  actionType: "SIGN_IN"
-  address: "0x6C18230EF8Bf455adDA98F5E3ABfe710bD8489C2"
-  chainId: 1
-  email: "test_email@gmail.com"
-  ens: ""
-  networkName: "Mainnet Ethereum"
-  networkScanner: "https://etherscan.io/address"
-  provider: "metamask"
-  verificationType: "SIWE"
-  signature: "fjsjbj2j2bj33333ff33ffdff43"
-  message: "<message that was signed>"
-  nonceSetFromBackend: true
-  web3Provider: {connection: {url: 'metamask'}...}
-}
-```
 
-Structure of data returned from Connection component (errorcallback callback)
+Form component error callback data (ErrorMessageData)
 | Data | Data Type | Description
 | --- | --- | --- |
-| actionType | string | Type of authentication (SIGN_UP, SIGN_IN) 
+| actionType | string | Type of authentication (SIGN_UP, SIGN_IN, BUTTON_SIGN) 
 | verificationType | string | Signature type (EIP712)
 | message | string | Error message
 
-```typescript
-// example error data
-{
-  actionType: "SIGN_UP"
-  message: "Sign in/ Sign up not supported for current network. Try changing networks"
-  verificationType: "SIWE"
-}
-```
 
-### Usage
-1. Add imports for web3-cloud and useCallback (react hooks)
- ```typescript
- import { Connection } from "web3-cloud";
- import { useCallback } from "react";
-```
+### Usage (React component)
+- (Example implementation using React)
+```jsx
+import { Form } from "web3-cloud";
+import { useCallback } from "react";
 
-2. Add component(Example implementation using React)
-```typescript
-// Define ReactHooks Callbacks
-    const web3DataCallback = useCallback((web3Values) => {
-     try {
-        switch(web3Values.actionType) {
-          case 'SIGN_UP':
-            // create user in database
-            // pass web3 Data to your applications Redux store
-            break;
-          case 'SIGN_IN':
-            // fetch user data from database
-            break;
-        }
-      } catch(err) {
-        // handle errors
+export default function AuthPage() {
+
+  // Define ReactHooks callbacks
+  const web3DataCallback = useCallback((web3Values) => {
+    try {
+      switch(web3Values.actionType) {
+        case 'SIGN_UP':
+          // create user in database
+          // pass web3 Data to your applications Redux store
+          break;
+        case 'SIGN_IN':
+          // fetch user data from database
+          break;
       }
+    } catch(err) {
+      // handle errors
+    }
   }, []);
 
-  const web3ErrorCallback = useCallback((error) => {
+  const web3formErrorcallback = useCallback((error) => {
     // handle errors based on error types
     try {
       switch(web3Values.actionType) {
@@ -160,51 +159,53 @@ Structure of data returned from Connection component (errorcallback callback)
         case 'SIGN_IN':
           break;
       }
-      } catch(err) {
-      }
+    } catch(err) {
+    }
   }, []);
 
+return (
+  <div>
+      {/* Option 2 - With nonce backend */}
+      <Form
+        primary={true}
+        backgroundcolor='green'
+        size='large'
+        dappname='Your Brand Here'
+        infuraId='<your infura id>'
+        logourl='<your dapp logo image url>'
+        homePageurl='<your dapp home page url>'
+        disableErrorDisplay={false}
+        messageToSign={'Your message that users will sign'}
+        backend={{
+            endpoint: 'https://my.api.com/nonce',
+            requestOptions: {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${apiKey}`
+              }
+            }
+          }}
+        formDataCallback={web3DataCallback}
+        formErrorCallback={web3formErrorcallback}
+      />
 
-// Option 1 - With nonce backend
-  <Connection
-    primary={true}
-    backgroundcolor='green'
-    size='large'
-    verifyinglabel='Verifiying Signature...'
-    dappname='Web3 Cloud'
-    infuraId='<your infura id>'
-    logourl='<your dapp logo image url>'
-    homePageurl='<your dapp home page url>'
-    disableErrorDisplay={false}
-    messageToSign={'Your message that users will sign'}
-    backend={{
-        endpoint: 'https://my.api.com/nonce',
-        requestOptions: {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`
-          }
-        }
-      }}
-    passweb3data={web3DataCallback}
-    errorcallback={web3ErrorCallback}
-  />
-
-  // Option 2 - Without nonce backend 
-  <Connection
-    primary={true}
-    backgroundcolor='green'
-    size='large'
-    verifyinglabel='Verifiying Signature...'
-    dappname='Web3 Cloud'
-    infuraId='<your infura id>'
-    logourl='<your dapp logo image url>'
-    homePageurl='<your dapp home page url>'
-    disableErrorDisplay={false}
-    messageToSign={'Your message that users will sign'}
-    passweb3data={web3DataCallback}
-    errorcallback={web3ErrorCallback}
-  />
+      {/* Option 2 - Without nonce backend   */}
+      <Form
+        primary={true}
+        backgroundcolor='green'
+        size='large'
+        dappname='Web3 Cloud'
+        infuraId='<your infura id>'
+        logourl='<your dapp logo image url>'
+        homePageurl='<your dapp home page url>'
+        disableErrorDisplay={false}
+        messageToSign={'Your message that users will sign'}
+        formDataCallback={web3DataCallback}
+        formErrorCallback={web3formErrorcallback}
+      />
+    </div>
+  );
+}
 ```
 
 <img src="readme-images/web3-cloud-connection-component-sign-up.jpg" width="100%" margin-bottom="5%" align="left" >
@@ -219,6 +220,165 @@ Structure of data returned from Connection component (errorcallback callback)
 <img src="readme-images/web3-cloud-connection-component-sig-verifying.jpg" width="100%" margin-bottom="5%" align="left" >
 
 ---
+
+
+### Button component 
+- Description: Dapp UI Form component for Ethereum wallet signature capture
+- Features:
+  1. ENS Resolution
+  2. (Optional)Fetch nonce from backend server(Sign-In with Ethereum)
+      - Follow recommended documention for fetching nonce from a backend server (https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/implement-the-backend)
+  3. (EIP-1271 signatures) Sign-In with Ethereum - https://github.com/spruceid/siwe
+  4. Sign message with nonces
+  5. Signature expiration time: 10 mins
+
+```typescript
+// Button component prop types 
+interface ButtonProps {
+  primary: boolean;
+  backgroundcolor: string; 
+  size: string;
+  buttonDataCallback: (web3Data: ButtonSignatureData) => void;
+  buttonErrorCallback: (errorData: ErrorMessageData) => void;
+  dappname: string;
+  infuraId: string;
+  messageToSign: string;
+  backend?: Backend
+}
+
+interface Backend {
+  endpoint: string,
+  requestOptions: {
+    method: string,
+    headers?: any
+  }
+}
+
+// Button component signature callback data types 
+interface ButtonSignatureData {
+  actionType: string;
+  verificationType: string;
+  networkName: string;
+  provideType: string;
+  networkScanner: string;
+  signature: string;
+  chainId: number;
+  address: string;
+  ens: string;
+  message: string;
+  nonceSetFromBackend: boolean;
+  web3Provider: ethers.providers.Web3Provider | null;
+}
+
+// Button component error callback data types
+interface ErrorMessageData {
+  actionType: string;
+  verificationType: string;
+  message: string;
+}
+```
+
+Button component of callback data (ButtonSignatureData)
+| Data | Data Type | Description
+| --- | --- | --- |
+| address | string | Ethereum account
+| ens | string | Register ENS for Ethereum account
+| actionType | string | Type of authentication (SIGN_UP, SIGN_IN, BUTTON_SIGN) 
+| networkName | string | Name of connected network
+| networkScanner | string | Block scanner URL for connected network
+| signature | string | String that contains signature data
+| message | string | String that contains message that account signed
+| provideType | string | name of Wallet provider (metamask, wallet-connect)
+| nonceSetFromBackend | boolean | set to true when nonce in message comes from backend endpoint
+| web3Provider | ethers.providers.Web3Provider | Web3 Provider
+
+
+Button component error callback data (ErrorMessageData)
+| Data | Data Type | Description
+| --- | --- | --- |
+| actionType | string | Type of authentication (SIGN_UP, SIGN_IN, BUTTON_SIGN) 
+| verificationType | string | Signature type (EIP712)
+| message | string | Error message
+
+
+### Usage (React component)
+- (Example implementation using React)
+```jsx
+import { Button } from "web3-cloud";
+import { useCallback } from "react";
+
+export default function AuthPageWithButton() {
+
+  // Define ReactHooks callbacks
+  const web3DataCallback = useCallback((web3Values) => {
+    try {
+      switch(web3Values.actionType) {
+        case 'SIGN_UP':
+          // create user in database
+          // pass web3 Data to your applications Redux store
+          break;
+        case 'SIGN_IN':
+          // fetch user data from database
+          break;
+      }
+    } catch(err) {
+      // handle errors
+    }
+  }, []);
+
+  const web3buttonErrorcallback = useCallback((error) => {
+    // handle errors based on error types
+    try {
+      switch(web3Values.actionType) {
+        case 'SIGN_UP':
+          break;
+        case 'SIGN_IN':
+          break;
+      }
+    } catch(err) {
+    }
+  }, []);
+
+return (
+  <div>
+      {/* Option 2 - With nonce backend */}
+      <Button
+        primary={true}
+        backgroundcolor='green'
+        size='large'
+        buttonlabel='Sign in with wallet'
+        dappname='Your Brand Here'
+        infuraId='<your infura id>'
+        messageToSign={'Your message that users will sign'}
+        backend={{
+            endpoint: 'https://my.api.com/nonce',
+            requestOptions: {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer <apiKey>`
+              }
+            }
+        }}
+        buttonDataCallback={web3DataCallback}
+        buttonErrorCallback={web3buttonErrorcallback}
+      />
+
+      {/* Option 2 - Without nonce backend   */}
+      <Button
+        primary={true}
+        backgroundcolor='green'
+        size='large'
+        buttonlabel='Sign in with wallet'
+        dappname='Your Brand Here'
+        infuraId='<your infura id>'
+        messageToSign={'Your message that users will sign'}
+        buttonDataCallback={web3DataCallback}
+        buttonErrorCallback={web3formErrorcallback}
+      />
+    </div>
+  );
+}
+```
 
 ## Local dev
 1. Install Dependencies

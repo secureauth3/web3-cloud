@@ -1,12 +1,15 @@
-import React, {useState, FC } from "react";
-import { ConnectionProps } from "../../interface/connection-interface";
-import { Web3Service } from "../../services/Web3Service/Web3Service";
-import { ActionData, ACTION_TPYE, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
-import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
+import React, {useState} from "react";
 import Modal from 'react-modal';
+
+import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
+import { Web3Service } from "../../services/Web3Service/Web3Service";
+import { FormSignatureData, ACTION_TPYE, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
+import { FormProps } from '../../interface/form-interface';
+
 import metamaskLogo from '../../assets/metamask.png';
 import walletConnectLogo from '../../assets/walletConnect.png';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './Form.css';
 import '../../styles.css';
 
 declare global {
@@ -17,25 +20,22 @@ declare global {
 }
 
 /**
- * Dapp UI Connection component for user interaction with Ethereum wallet
+ * Dapp UI Form component for user interaction with Ethereum wallet
  */
-Modal.setAppElement('#root');
-export const Connection:FC<ConnectionProps> = ({
+export function Form({
   primary,
   backgroundcolor, 
   size, 
-  verifyinglabel,
-  passweb3data,
-  errorcallback,
+  formDataCallback,
+  formErrorCallback,
   dappname,
   logourl,
   infuraId,
   homePageurl,
   disableErrorDisplay,
   messageToSign,
-  backend,
-  ...props
-  }) => {
+  backend
+  }: FormProps) {
 
   const buttonStyle = {
     backgroundColor: backgroundcolor,
@@ -48,13 +48,12 @@ export const Connection:FC<ConnectionProps> = ({
   const [web3Values, setWeb3values] = useState({
     providerSetOnClient: false,
     validSig: false,
-    isVerifying: false,
+    isRequestingSig: false,
     provider: '',
     email: '',
     firstName: '',
     lastName: '',
     isRenderSignUp: true,
-    isRenderVerifying: false,
     authErrMessage: '',
     showConnectAccountModal: false,
     showWalletInfo: false,
@@ -65,15 +64,6 @@ export const Connection:FC<ConnectionProps> = ({
   const doOpenModal = async (event: any, actionType: ACTION_TPYE) => {
     event.preventDefault();
 
-    setWeb3values((web3Values) => ({
-      ...web3Values,
-      showConnectAccountModal: true,
-      actionType: actionType
-    }));
-  }
-
-  const doAuthUser = async (event: any, walletProvider: Providers) => {
-    event.preventDefault();
     const isValidInput = checkInputValues();
     if(!isValidInput.valid) {
       const error: ErrorMessageData = {
@@ -85,10 +75,37 @@ export const Connection:FC<ConnectionProps> = ({
       return;
     }
 
+    setWeb3values((web3Values) => ({
+      ...web3Values,
+      showConnectAccountModal: true,
+      actionType: actionType
+    }));
+  }
+
+  const closeModalRequest = (event: any) => {
+    event.preventDefault();
+
+    if (web3Values.isRequestingSig) {
+      return;
+    }
+
+    setWeb3values((web3Values) => ({
+      ...web3Values,
+      showConnectAccountModal: !web3Values.showConnectAccountModal,
+      isRequestingSig: false,
+    }))
+  }
+
+  const doAuthUser = async (event: any, walletProvider: Providers) => {
+    event.preventDefault();
+    if (web3Values.isRequestingSig) {
+      return;
+    }
+
     try {
       setWeb3values((web3Values) => ({
         ...web3Values,
-        isVerifying: true,
+        isRequestingSig: true,
         provider: walletProvider,
       }));
 
@@ -121,29 +138,22 @@ export const Connection:FC<ConnectionProps> = ({
         backend,
       );
 
-      // update state to verifying
+      // close modal and update state to provider state
       setWeb3values((web3Values) => ({
         ...web3Values,
         providerSetOnClient: true,
         showConnectAccountModal: false,
         validSig: true,
-        email: '',
-        firstName: '',
-        lastName: '',
-        emailInit: true,
-        firstNameInit: true,
-        lastNameInit: true,
         authErrMessage: '',
-        isRenderVerifying: true,
         web3Provider: providerResult.provider
       }));
 
       /*
-        gather data
+        gather and send data
       */  
       const networkName = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.name;
       const scannerUrl = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.scannerUrl;
-      const finalData: ActionData = {
+      const finalData: FormSignatureData = {
           actionType: web3Values.actionType,
           verificationType: VerifactionType.SIWE,
           provideType: walletProvider,
@@ -161,14 +171,14 @@ export const Connection:FC<ConnectionProps> = ({
 
       switch(web3Values.actionType) {
         case ACTION_TPYE.SIGN_UP:
-          passweb3data({
+          formDataCallback({
               ...finalData,
               firstName: web3Values.firstName,
               lastName: web3Values.lastName
           });
           break;
         case ACTION_TPYE.SIGN_IN:
-          passweb3data(finalData);
+          formDataCallback(finalData);
           break;
         default:
           break;
@@ -177,7 +187,15 @@ export const Connection:FC<ConnectionProps> = ({
       if('message' in err) {
         if (err.message === 'User closed modal') {
           return;
-        } else {
+        } else if (err.message === 'MetaMask Message Signature: User denied message signature') {
+          const error: ErrorMessageData = {
+            actionType: web3Values.actionType,
+            verificationType: VerifactionType.SIWE,
+            message: err.message
+          }
+          errorLogger(error);
+        }
+        else {
           errorLogger(err);
           return;
         }
@@ -190,23 +208,23 @@ export const Connection:FC<ConnectionProps> = ({
       return {type: 'infuraId' , valid: false};
     } else if (dappname === '') {
       return {type: 'dappname' , valid: false};
-    } else if (verifyinglabel === '') {
-      return {type: 'verifyinglabel' , valid: false};
     } else {
       return {type: 'valid' , valid: true};
     }
   }
 
   const errorLogger = (error: ErrorMessageData) => {
-    errorcallback(error);
+    formErrorCallback(error);
     setWeb3values((web3Values) => ({
       ...web3Values,
-      connected: false,
-      isVerifying: false,
-      validSig: false,
       providerSetOnClient: false,
+      validSig: false,
+      isRequestingSig: false,
+      provider: '',
       authErrMessage: error.message,
-      showConnectAccountModal: false
+      showConnectAccountModal: false,
+      showWalletInfo: false,
+      actionType: '',
     }));
   }
 
@@ -237,17 +255,18 @@ export const Connection:FC<ConnectionProps> = ({
   const doToggleViews = () => {
     setWeb3values((web3Values) => ({
       ...web3Values,
-      connected: false,
-      isVerifying: false,
+      providerSetOnClient: false,
       validSig: false,
+      isRequestingSig: false,
+      provider: '',
       email: '',
       firstName: '',
       lastName: '',
-      emailInit: true,
-      firstNameInit: true,
-      lastNameInit: true,
       isRenderSignUp: !web3Values.isRenderSignUp,
-      authErrMessage: ''
+      authErrMessage: '',
+      showConnectAccountModal: false,
+      showWalletInfo: false,
+      actionType: '',
     }));
   }
 
@@ -255,27 +274,26 @@ export const Connection:FC<ConnectionProps> = ({
     return(
       <form className="web3-cloud-signin-form" onSubmit={(e) => doOpenModal(e, ACTION_TPYE.SIGN_UP)}>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="text" placeholder="Your first name" value={web3Values.firstName} onChange={onFirstNameChanged} required/>
+          <input className='form-control' type="text" placeholder="Your first name" value={web3Values.firstName} onChange={onFirstNameChanged} required/>
         </div>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="text" placeholder="Your last name" value={web3Values.lastName} onChange={onLastNameChanged} required/>
+          <input className='form-control' type="text" placeholder="Your last name" value={web3Values.lastName} onChange={onLastNameChanged} required/>
         </div>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
+          <input className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
-          {!web3Values.validSig && !disableErrorDisplay &&(
-            <p className="form-text text-muted web3-cloud-invalid">{web3Values.authErrMessage}</p>
-          )}
           <button
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
             style={buttonStyle}
-            {...props}
             >
             Sign up with a Wallet
           </button>
           <p>Already have an account? <span className="web3-cloud-signin-toggle" onClick={doToggleViews} style={likStlye}>Sign in</span></p>
+          {!web3Values.validSig && !disableErrorDisplay &&(
+            <p className="form-text web3-cloud-invalid">{web3Values.authErrMessage}</p>
+          )}
         </div>
       </form>
     );
@@ -285,12 +303,10 @@ export const Connection:FC<ConnectionProps> = ({
     return (
       <form id="" className="web3-cloud-signin-form" onSubmit={(e) => doOpenModal(e, ACTION_TPYE.SIGN_IN)}>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
+          <input className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
-          {!web3Values.validSig && !disableErrorDisplay &&(
-            <p className="form-text text-muted web3-cloud-invalid">{web3Values.authErrMessage}</p>
-          )}
+         
           <button
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
@@ -299,63 +315,50 @@ export const Connection:FC<ConnectionProps> = ({
             Sign in with a Wallet
           </button>
           <p>Don't have an account? <span className="web3-cloud-signin-toggle" onClick={doToggleViews} style={likStlye}>Sign up</span></p>
+          {!web3Values.validSig && !disableErrorDisplay &&(
+            <p className="form-text web3-cloud-invalid">{web3Values.authErrMessage}</p>
+          )}
         </div>
       </form>
-    );
-  }
-
-  const renderVerifyingView = () => {
-    return (
-      <p className="web3-cloud-verifyinglabel">{verifyinglabel}</p>
     );
   }
 
   return (
     <div className="card web3-cloud-sign-in-container">
         <div className="web3-cloud-form-container">
-          {web3Values.isRenderVerifying ?
-            <div>{renderVerifyingView()}</div>
-          :
-            <div>
-              <header>
-                <img src={logourl} alt="profile-img" className="web3-cloud-profile-img-card" onClick={
-                 (e) => {
+          <div>
+            <header>
+              <img src={logourl} alt="profile-img" className="web3-cloud-profile-img-card" onClick={
+                (e) => {
+                e.preventDefault();
+                window.open(homePageurl, "_self")
+                }
+              }/>
+              <h1 className="web3-cloud-dapp-name"
+              onClick={
+                (e) => {
                   e.preventDefault();
                   window.open(homePageurl, "_self")
-                 }
-                }/>
-                <h1 className="web3-cloud-dapp-name"
-                onClick={
-                  (e) => {
-                   e.preventDefault();
-                   window.open(homePageurl, "_self")
-                  }
-                 }>{dappname}</h1>
-              </header>
-              {web3Values.isRenderSignUp ? 
-              <div>{renderSignUpView()}</div>
-                :
-              <div>{renderSignInView()}</div>
-              }
-            </div>
-          }
+                }
+                }>{dappname}</h1>
+            </header>
+            {web3Values.isRenderSignUp ? 
+            <div>{renderSignUpView()}</div>
+              :
+            <div>{renderSignInView()}</div>
+            }
+          </div>
         </div>
         <Modal id="modal-connect" 
           shouldCloseOnEsc={true}
           shouldCloseOnOverlayClick={true}
-          onRequestClose={(e) => { setWeb3values((web3Values) => ({
-            ...web3Values,
-            showConnectAccountModal: !web3Values.showConnectAccountModal
-          }))}}
+          ariaHideApp={false}
+          onRequestClose={(e) => {closeModalRequest(e)}}
           isOpen={web3Values.showConnectAccountModal}
           >
           <div className="modal-header">
             <h5 className="modal-title">Select a Wallet</h5>
-            <button type="button" className="btn-close" aria-label="Close" onClick={(e) => {setWeb3values((web3Values) => ({
-              ...web3Values,
-              showConnectAccountModal: !web3Values.showConnectAccountModal,
-              isVerifying: false
-              }))}}>
+            <button type="button" className="btn-close" aria-label="Close" onClick={(e) => {closeModalRequest(e)}}>
             </button>
           </div>
           <div className="modal-body">
@@ -398,7 +401,7 @@ export const Connection:FC<ConnectionProps> = ({
   );
 };
 
-Connection.defaultProps = {
+Form.defaultProps = {
   backgroundcolor: 'blue',
   primary: true,
   size: 'large',

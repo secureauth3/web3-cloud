@@ -1,26 +1,25 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import "regenerator-runtime/runtime.js";
-import { ActionData, ErrorMessageData } from "../../interface/web3-data-interface";
-import { Connection } from "./Connection";
+import { FormSignatureData, ErrorMessageData } from "../../interface/web3-data-interface";
+import { Form } from "./Form";
 
-describe("Connection", () => {
-    let web3data: ActionData;
+describe("Form", () => {
+    let web3data: FormSignatureData;
     let errorObject: ErrorMessageData;
 
-    test("renders the Connection component", () => {
-        render(<Connection
+    test("renders the Form component", () => {
+        render(<Form
             primary={true}
             backgroundcolor='blue'
             size='large'
-            verifyinglabel='Verfiying Signature...'
             dappname='Web3 Cloud'
             homePageurl='https://idrisbowman.com/'
             logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
-            passweb3data={((web3Values: ActionData) => {
+            formDataCallback={((web3Values: FormSignatureData) => {
                 web3data = web3Values;
             })}
-            errorcallback={((error: ErrorMessageData) => {
+            formErrorCallback={((error: ErrorMessageData) => {
                 errorObject = error;
             })} 
             infuraId={''}

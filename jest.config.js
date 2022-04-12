@@ -6,18 +6,19 @@ module.exports = {
     coverageDirectory: "coverage",
     verbose: true,
     moduleNameMapper: {
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
         ".(css|less|scss)$": "identity-obj-proxy",
     },
     coveragePathIgnorePatterns: [
         "/node_modules/",
         "<rootDir>/src/abi",
         "<rootDir>/src/stories",
-        "<rootDir>/src/components/Connection/index.js",
+        "<rootDir>/src/components/Form/index.js",
     ],
     testPathIgnorePatterns: [
         "<rootDir>/src/abi",
         "<rootDir>/src/stories",
-        "<rootDir>/src/components/Connection/index.js",
+        "<rootDir>/src/components/Form/index.js",
     ],
     coverageReporters: [
         "json",
