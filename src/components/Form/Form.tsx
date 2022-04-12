@@ -1,9 +1,9 @@
-import React, {useState, FC } from "react";
+import React, {useState} from "react";
 import Modal from 'react-modal';
 
 import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
 import { Web3Service } from "../../services/Web3Service/Web3Service";
-import { ActionData, ACTION_TPYE, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
+import { FormSignatureData, ACTION_TPYE, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
 import { FormProps } from '../../interface/form-interface';
 
 import metamaskLogo from '../../assets/metamask.png';
@@ -22,22 +22,20 @@ declare global {
 /**
  * Dapp UI Form component for user interaction with Ethereum wallet
  */
-export const Form:FC<FormProps> = ({
+export function Form({
   primary,
   backgroundcolor, 
   size, 
-  verifyinglabel,
-  passweb3data,
-  errorcallback,
+  formDataCallback,
+  formErrorcallback,
   dappname,
   logourl,
   infuraId,
   homePageurl,
   disableErrorDisplay,
   messageToSign,
-  backend,
-  ...props
-  }) => {
+  backend
+  }: FormProps) {
 
   const buttonStyle = {
     backgroundColor: backgroundcolor,
@@ -50,7 +48,7 @@ export const Form:FC<FormProps> = ({
   const [web3Values, setWeb3values] = useState({
     providerSetOnClient: false,
     validSig: false,
-    isVerifying: false,
+    isRequestingSig: false,
     provider: '',
     email: '',
     firstName: '',
@@ -76,8 +74,26 @@ export const Form:FC<FormProps> = ({
     }));
   }
 
+  const closeModalRequest = (event: any) => {
+    event.preventDefault();
+
+    if (web3Values.isRequestingSig) {
+      return;
+    }
+
+    setWeb3values((web3Values) => ({
+      ...web3Values,
+      showConnectAccountModal: !web3Values.showConnectAccountModal,
+      isRequestingSig: false,
+    }))
+  }
+
   const doAuthUser = async (event: any, walletProvider: Providers) => {
     event.preventDefault();
+    if (web3Values.isRequestingSig) {
+      return;
+    }
+
     const isValidInput = checkInputValues();
     if(!isValidInput.valid) {
       const error: ErrorMessageData = {
@@ -92,7 +108,7 @@ export const Form:FC<FormProps> = ({
     try {
       setWeb3values((web3Values) => ({
         ...web3Values,
-        isVerifying: true,
+        isRequestingSig: true,
         provider: walletProvider,
       }));
 
@@ -140,7 +156,7 @@ export const Form:FC<FormProps> = ({
       */  
       const networkName = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.name;
       const scannerUrl = CHAINID_NETWORK_MAP.get(providerResult.chainId)?.scannerUrl;
-      const finalData: ActionData = {
+      const finalData: FormSignatureData = {
           actionType: web3Values.actionType,
           verificationType: VerifactionType.SIWE,
           provideType: walletProvider,
@@ -158,14 +174,14 @@ export const Form:FC<FormProps> = ({
 
       switch(web3Values.actionType) {
         case ACTION_TPYE.SIGN_UP:
-          passweb3data({
+          formDataCallback({
               ...finalData,
               firstName: web3Values.firstName,
               lastName: web3Values.lastName
           });
           break;
         case ACTION_TPYE.SIGN_IN:
-          passweb3data(finalData);
+          formDataCallback(finalData);
           break;
         default:
           break;
@@ -174,7 +190,15 @@ export const Form:FC<FormProps> = ({
       if('message' in err) {
         if (err.message === 'User closed modal') {
           return;
-        } else {
+        } else if (err.message === 'MetaMask Message Signature: User denied message signature') {
+          const error: ErrorMessageData = {
+            actionType: web3Values.actionType,
+            verificationType: VerifactionType.SIWE,
+            message: err.message
+          }
+          errorLogger(err);
+        }
+        else {
           errorLogger(err);
           return;
         }
@@ -187,24 +211,20 @@ export const Form:FC<FormProps> = ({
       return {type: 'infuraId' , valid: false};
     } else if (dappname === '') {
       return {type: 'dappname' , valid: false};
-    } else if (verifyinglabel === '') {
-      return {type: 'verifyinglabel' , valid: false};
     } else {
       return {type: 'valid' , valid: true};
     }
   }
 
   const errorLogger = (error: ErrorMessageData) => {
-    errorcallback(error);
+    formErrorcallback(error);
     setWeb3values((web3Values) => ({
       ...web3Values,
       providerSetOnClient: false,
       validSig: false,
-      isVerifying: false,
+      isRequestingSig: false,
       provider: '',
-      email: '',
-      firstName: '',
-      lastName: '',
+      isRenderSignUp: true,
       emailInit: true,
       firstNameInit: true,
       lastNameInit: true,
@@ -244,7 +264,7 @@ export const Form:FC<FormProps> = ({
       ...web3Values,
       providerSetOnClient: false,
       validSig: false,
-      isVerifying: false,
+      isRequestingSig: false,
       provider: '',
       email: '',
       firstName: '',
@@ -264,20 +284,19 @@ export const Form:FC<FormProps> = ({
     return(
       <form className="web3-cloud-signin-form" onSubmit={(e) => doOpenModal(e, ACTION_TPYE.SIGN_UP)}>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="text" placeholder="Your first name" value={web3Values.firstName} onChange={onFirstNameChanged} required/>
+          <input className='form-control' type="text" placeholder="Your first name" value={web3Values.firstName} onChange={onFirstNameChanged} required/>
         </div>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="text" placeholder="Your last name" value={web3Values.lastName} onChange={onLastNameChanged} required/>
+          <input className='form-control' type="text" placeholder="Your last name" value={web3Values.lastName} onChange={onLastNameChanged} required/>
         </div>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
+          <input className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
           <button
             type="submit"
             className={['web3-cloud-connection-button', `web3-cloud-connection-button--${size}`, mode].join(' ')}
             style={buttonStyle}
-            {...props}
             >
             Sign up with a Wallet
           </button>
@@ -294,7 +313,7 @@ export const Form:FC<FormProps> = ({
     return (
       <form id="" className="web3-cloud-signin-form" onSubmit={(e) => doOpenModal(e, ACTION_TPYE.SIGN_IN)}>
         <div className="form-group  web3-cloud-email">
-          <input disabled={web3Values.isVerifying} className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
+          <input className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
         <div>
          
@@ -344,19 +363,12 @@ export const Form:FC<FormProps> = ({
           shouldCloseOnEsc={true}
           shouldCloseOnOverlayClick={true}
           ariaHideApp={false}
-          onRequestClose={(e) => { setWeb3values((web3Values) => ({
-            ...web3Values,
-            showConnectAccountModal: !web3Values.showConnectAccountModal
-          }))}}
+          onRequestClose={(e) => {closeModalRequest(e)}}
           isOpen={web3Values.showConnectAccountModal}
           >
           <div className="modal-header">
             <h5 className="modal-title">Select a Wallet</h5>
-            <button type="button" className="btn-close" aria-label="Close" onClick={(e) => {setWeb3values((web3Values) => ({
-              ...web3Values,
-              showConnectAccountModal: !web3Values.showConnectAccountModal,
-              isVerifying: false
-              }))}}>
+            <button type="button" className="btn-close" aria-label="Close" onClick={(e) => {closeModalRequest(e)}}>
             </button>
           </div>
           <div className="modal-body">

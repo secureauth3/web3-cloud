@@ -1,12 +1,11 @@
-import { ActionData, Backend, ErrorMessageData } from "./web3-data-interface";
+import { FormSignatureData, Backend, ErrorMessageData } from "./web3-data-interface";
 
 export interface FormProps {
     primary: boolean;
     backgroundcolor: string; 
     size: string; 
-    verifyinglabel: string;
-    passweb3data: (web3Data: ActionData) => void;
-    errorcallback: (errorData: ErrorMessageData) => void;
+    formDataCallback: (web3Data: FormSignatureData) => void;
+    formErrorcallback: (errorData: ErrorMessageData) => void;
     dappname: string;
     logourl: string;
     infuraId: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import { Button } from '../components/Button';
-import { ActionData, ErrorMessageData } from '../interface/web3-data-interface';
+import { ButtonSignatureData, ErrorMessageData } from '../interface/web3-data-interface';
 import { ButtonProps } from '../interface/button-interface';
 
 export default {
@@ -10,7 +10,7 @@ export default {
   component: Button,
 } as ComponentMeta<typeof Button>;
 
-let web3data: ActionData;
+let web3data: ButtonSignatureData;
 let errorObject: ErrorMessageData;
 
 const Template: ComponentStory<typeof Button> = (args: ButtonProps) =>
@@ -19,15 +19,14 @@ const Template: ComponentStory<typeof Button> = (args: ButtonProps) =>
       primary={true}
       backgroundcolor='green'
       size='large'
-      verifyinglabel='Verifiying Signature...'
       buttonlabel='Sign in with wallet'
       dappname='Web3 Cloud'
-      infuraId=''
+      infuraId='dd42793ccfce464e853f96164d654db9'
       messageToSign={`Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. Please be aware that signing will not cost any gas!`}
-      passSignedCallback={(async (web3Values: ActionData) => {
+      buttonDataCallback={(async (web3Values: ButtonSignatureData) => {
         web3data = web3Values;
       })}
-      errorcallback={(async (error: ErrorMessageData) => {
+      buttonErrorcallback={(async (error: ErrorMessageData) => {
         errorObject = error;
       })}   
     />
