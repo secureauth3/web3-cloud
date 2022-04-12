@@ -21,7 +21,7 @@ const Template: ComponentStory<typeof Button> = (args: ButtonProps) =>
       size='large'
       buttonlabel='Sign in with wallet'
       dappname='Web3 Cloud'
-      infuraId='dd42793ccfce464e853f96164d654db9'
+      infuraId=''
       messageToSign={`Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. Please be aware that signing will not cost any gas!`}
       buttonDataCallback={(async (web3Values: ButtonSignatureData) => {
         web3data = web3Values;
