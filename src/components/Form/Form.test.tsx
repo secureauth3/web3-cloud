@@ -19,7 +19,7 @@ describe("Form", () => {
             formDataCallback={((web3Values: FormSignatureData) => {
                 web3data = web3Values;
             })}
-            formErrorcallback={((error: ErrorMessageData) => {
+            formErrorCallback={((error: ErrorMessageData) => {
                 errorObject = error;
             })} 
             infuraId={''}

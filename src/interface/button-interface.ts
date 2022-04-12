@@ -6,7 +6,7 @@ export interface ButtonProps {
     size: string; 
     buttonlabel: string;
     buttonDataCallback: (web3Data: ButtonSignatureData) => void;
-    buttonErrorcallback: (errorData: ErrorMessageData) => void;
+    buttonErrorCallback: (errorData: ErrorMessageData) => void;
     dappname: string;
     infuraId: string;
     messageToSign: string;

@@ -5,7 +5,7 @@ export interface FormProps {
     backgroundcolor: string; 
     size: string; 
     formDataCallback: (web3Data: FormSignatureData) => void;
-    formErrorcallback: (errorData: ErrorMessageData) => void;
+    formErrorCallback: (errorData: ErrorMessageData) => void;
     dappname: string;
     logourl: string;
     infuraId: string;

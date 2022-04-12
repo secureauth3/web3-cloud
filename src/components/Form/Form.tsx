@@ -27,7 +27,7 @@ export function Form({
   backgroundcolor, 
   size, 
   formDataCallback,
-  formErrorcallback,
+  formErrorCallback,
   dappname,
   logourl,
   infuraId,
@@ -54,9 +54,6 @@ export function Form({
     firstName: '',
     lastName: '',
     isRenderSignUp: true,
-    emailInit: true,
-    firstNameInit: true,
-    lastNameInit: true,
     authErrMessage: '',
     showConnectAccountModal: false,
     showWalletInfo: false,
@@ -66,6 +63,17 @@ export function Form({
 
   const doOpenModal = async (event: any, actionType: ACTION_TPYE) => {
     event.preventDefault();
+
+    const isValidInput = checkInputValues();
+    if(!isValidInput.valid) {
+      const error: ErrorMessageData = {
+        actionType: web3Values.actionType,
+        verificationType: VerifactionType.SIWE,
+        message: `Invalid ${isValidInput.type} input for Connection component`
+      }
+      errorLogger(error);
+      return;
+    }
 
     setWeb3values((web3Values) => ({
       ...web3Values,
@@ -91,17 +99,6 @@ export function Form({
   const doAuthUser = async (event: any, walletProvider: Providers) => {
     event.preventDefault();
     if (web3Values.isRequestingSig) {
-      return;
-    }
-
-    const isValidInput = checkInputValues();
-    if(!isValidInput.valid) {
-      const error: ErrorMessageData = {
-        actionType: web3Values.actionType,
-        verificationType: VerifactionType.SIWE,
-        message: `Invalid ${isValidInput.type} input for Connection component`
-      }
-      errorLogger(error);
       return;
     }
 
@@ -196,7 +193,7 @@ export function Form({
             verificationType: VerifactionType.SIWE,
             message: err.message
           }
-          errorLogger(err);
+          errorLogger(error);
         }
         else {
           errorLogger(err);
@@ -217,17 +214,13 @@ export function Form({
   }
 
   const errorLogger = (error: ErrorMessageData) => {
-    formErrorcallback(error);
+    formErrorCallback(error);
     setWeb3values((web3Values) => ({
       ...web3Values,
       providerSetOnClient: false,
       validSig: false,
       isRequestingSig: false,
       provider: '',
-      isRenderSignUp: true,
-      emailInit: true,
-      firstNameInit: true,
-      lastNameInit: true,
       authErrMessage: error.message,
       showConnectAccountModal: false,
       showWalletInfo: false,
@@ -270,9 +263,6 @@ export function Form({
       firstName: '',
       lastName: '',
       isRenderSignUp: !web3Values.isRenderSignUp,
-      emailInit: true,
-      firstNameInit: true,
-      lastNameInit: true,
       authErrMessage: '',
       showConnectAccountModal: false,
       showWalletInfo: false,

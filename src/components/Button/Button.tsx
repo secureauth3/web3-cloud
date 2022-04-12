@@ -16,7 +16,7 @@ export function Button({
     size, 
     buttonlabel,
     buttonDataCallback,
-    buttonErrorcallback,
+    buttonErrorCallback,
     dappname,
     infuraId,
     messageToSign,
@@ -42,6 +42,17 @@ export function Button({
     
     const doOpenModal = async (event: any, actionType: ACTION_TPYE) => {
         event.preventDefault();
+
+        const isValidInput = checkInputValues();
+        if(!isValidInput.valid) {
+            const error: ErrorMessageData = {
+            actionType: web3Values.actionType,
+            verificationType: VerifactionType.SIWE,
+            message: `Invalid ${isValidInput.type} input for Button component`
+            }
+            errorLogger(error);
+            return;
+        }
 
         setWeb3values((web3Values) => ({
         ...web3Values,
@@ -77,17 +88,6 @@ export function Button({
     const doAuthUser = async (event: any, walletProvider: Providers) => {
         event.preventDefault();
         if (web3Values.isRequestingSig) {
-            return;
-        }
-
-        const isValidInput = checkInputValues();
-        if(!isValidInput.valid) {
-            const error: ErrorMessageData = {
-            actionType: web3Values.actionType,
-            verificationType: VerifactionType.SIWE,
-            message: `Invalid ${isValidInput.type} input for Button component`
-            }
-            errorLogger(error);
             return;
         }
 
@@ -178,7 +178,7 @@ export function Button({
     }
 
     const errorLogger = (error: ErrorMessageData) => {
-        buttonErrorcallback(error);
+        buttonErrorCallback(error);
         // reset state
         setWeb3values((web3Values) => ({
             ...web3Values,

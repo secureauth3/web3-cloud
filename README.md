@@ -52,9 +52,8 @@ interface FormProps {
   primary: boolean;
   backgroundcolor: string; 
   size: string; 
-  verifyinglabel: string;
   formDataCallback: (web3Data: FormSignatureData) => void;
-  formErrorcallback: (errorData: ErrorMessageData) => void;
+  formErrorCallback: (errorData: ErrorMessageData) => void;
   dappname: string;
   logourl: string;
   infuraId: string;
@@ -171,8 +170,7 @@ return (
         primary={true}
         backgroundcolor='green'
         size='large'
-        verifyinglabel='Verifiying Signature...'
-        dappname='Web3 Cloud'
+        dappname='Your Brand Here'
         infuraId='<your infura id>'
         logourl='<your dapp logo image url>'
         homePageurl='<your dapp home page url>'
@@ -188,7 +186,7 @@ return (
             }
           }}
         formDataCallback={web3DataCallback}
-        formErrorcallback={web3formErrorcallback}
+        formErrorCallback={web3formErrorcallback}
       />
 
       {/* Option 2 - Without nonce backend   */}
@@ -196,7 +194,6 @@ return (
         primary={true}
         backgroundcolor='green'
         size='large'
-        verifyinglabel='Verifiying Signature...'
         dappname='Web3 Cloud'
         infuraId='<your infura id>'
         logourl='<your dapp logo image url>'
@@ -204,7 +201,7 @@ return (
         disableErrorDisplay={false}
         messageToSign={'Your message that users will sign'}
         formDataCallback={web3DataCallback}
-        formErrorcallback={web3formErrorcallback}
+        formErrorCallback={web3formErrorcallback}
       />
     </div>
   );
@@ -242,7 +239,7 @@ interface ButtonProps {
   backgroundcolor: string; 
   size: string;
   buttonDataCallback: (web3Data: ButtonSignatureData) => void;
-  buttonErrorcallback: (errorData: ErrorMessageData) => void;
+  buttonErrorCallback: (errorData: ErrorMessageData) => void;
   dappname: string;
   infuraId: string;
   messageToSign: string;
@@ -329,7 +326,7 @@ export default function AuthPageWithButton() {
     }
   }, []);
 
-  const web3formErrorcallback = useCallback((error) => {
+  const web3buttonErrorcallback = useCallback((error) => {
     // handle errors based on error types
     try {
       switch(web3Values.actionType) {
@@ -363,7 +360,7 @@ return (
             }
         }}
         buttonDataCallback={web3DataCallback}
-        buttonErrorCallback={web3formErrorcallback}
+        buttonErrorCallback={web3buttonErrorcallback}
       />
 
       {/* Option 2 - Without nonce backend   */}

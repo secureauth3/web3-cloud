@@ -39,7 +39,7 @@ const Template: ComponentStory<typeof Form> = (args: FormProps) =>
       formDataCallback={(async (web3Values: FormSignatureData) => {
         web3data = web3Values;
       })}
-      formErrorcallback={(async (error: ErrorMessageData) => {
+      formErrorCallback={(async (error: ErrorMessageData) => {
         errorObject = error;
       })}   
     />

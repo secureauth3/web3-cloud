@@ -26,7 +26,7 @@ const Template: ComponentStory<typeof Button> = (args: ButtonProps) =>
       buttonDataCallback={(async (web3Values: ButtonSignatureData) => {
         web3data = web3Values;
       })}
-      buttonErrorcallback={(async (error: ErrorMessageData) => {
+      buttonErrorCallback={(async (error: ErrorMessageData) => {
         errorObject = error;
       })}   
     />
