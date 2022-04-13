@@ -1,5 +1,6 @@
-import { AuthData } from "../../interface/auth-provider-interface";
-import { API_PREFIX } from "../../utils/routes.contant";
+import { AuthData } from "./SecureAuth3Provider";
+
+const API_PREFIX = '';
 
 export async function postUser(
   account: string,

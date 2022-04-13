@@ -1,8 +1,7 @@
 import React from 'react';
 import { ErrorMessageData, FormSignatureData } from '../interface/web3-data-interface';
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { FormProps } from '../interface/form-interface';
-import { Form } from '../components/Form/Form';
+import { Form, FormProps } from '../components/Form/Form';
 
 export default {
   title: 'Components/Form',

@@ -1,4 +1,7 @@
-import { NetworkInfo } from '../interface/network-interface';
+export interface NetworkInfo {
+    name: string;
+    scannerUrl: string;
+}
 
 export const CHAINID_NETWORK_MAP = new Map<number, NetworkInfo>([
     [1, {

@@ -1,14 +1,25 @@
 import React, {useState} from "react";
-import { ButtonProps } from "../../interface/button-interface";
-import { ACTION_TPYE, ButtonSignatureData, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
 import Modal from 'react-modal';
-
+import { ACTION_TPYE, Backend, ButtonSignatureData, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
+import { Web3Service } from "../../services/Web3Service/Web3Service";
+import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
 import metamaskLogo from '../../assets/metamask.png';
 import walletConnectLogo from '../../assets/walletConnect.png';
 import './Button.css';
 import '../../styles.css';
-import { Web3Service } from "../../services/Web3Service/Web3Service";
-import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
+
+export interface ButtonProps {
+    primary: boolean;
+    backgroundcolor: string; 
+    size: string; 
+    buttonlabel: string;
+    buttonDataCallback: (web3Data: ButtonSignatureData) => void;
+    buttonErrorCallback: (errorData: ErrorMessageData) => void;
+    dappname: string;
+    infuraId: string;
+    messageToSign: string;
+    backend?: Backend
+}
 
 export function Button({
     primary,
