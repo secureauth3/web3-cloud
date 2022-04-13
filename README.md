@@ -25,6 +25,27 @@ The perfect solution for Developers who want integrate Web3 sign-in/sign-up into
 - react-dom - 17.0.2 (https://www.npmjs.com/package/react-dom)
 ---
 
+## Webpack v5 support
+There are a lot of breaking changes in Webpack v5. Set up your project to work with web3-cloud library:
+
+#### configuring Webpack v5
+We highly recommend you to use the stable 4.0.3 version of Webpack. If you want to use web3-cloud on your project with Webpack v5 you need to add the fallback to your ```webpack.config.js``` file:
+
+```javascript
+module.exports = {
+    resolve: {
+        fallback: {
+            assert: require.resolve('assert'),
+            crypto: require.resolve('crypto-browserify'),
+            http: require.resolve('stream-http'),
+            https: require.resolve('https-browserify'),
+            os: require.resolve('os-browserify/browser'),
+            stream: require.resolve('stream-browserify'),
+        },
+    },
+};
+```
+
 ## Install
 
 ```
