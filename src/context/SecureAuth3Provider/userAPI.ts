@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { AuthData, NewUser } from "./SecureAuth3Provider";
 
 const API_PREFIX = 'http://localhost:8080';
@@ -22,7 +22,6 @@ export interface ErrorResponseMultiple {
   errors: ErrorMultipleBody [];
 }
 
-
 export async function postUser(newUser: NewUser, apiKey: string): Promise<PostUserReponse | ErrorResponse | ErrorResponseMultiple> {
   try {
     const payload = {
@@ -43,10 +42,14 @@ export async function postUser(newUser: NewUser, apiKey: string): Promise<PostUs
       withCredentials: false
     }
 
-    const res = await axios.post(`${API_PREFIX}/api/v1/owners`, payload, config);
+    const res: AxiosResponse = await axios.post(`${API_PREFIX}/api/v1/users`, payload, config);
     return res.data;
-  } catch (err) {
-    return {error: 'Error creating user.'}
+  } catch (err: any) {
+    if ('err.response.data' in err) {
+      return err.response.data;
+    } else {
+      return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
+    }
   }
 }
 

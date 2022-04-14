@@ -1,4 +1,4 @@
-import { NewUser, UserAuthData } from "./SecureAuth3Provider";
+import { Auth3ProviderData, NewUser, UserAuthData } from "./SecureAuth3Provider";
 import { ErrorMultipleBody, postUser } from "./userAPI";
 
 const web3AuthProvider = {
@@ -19,8 +19,8 @@ const web3AuthProvider = {
       permissionFlags: 0,
       lastLogin: 0,
     },
-  },
-  async auth3Signup(newUser: NewUser, apiKey: string, callback: VoidFunction ) {
+  } as Auth3ProviderData,
+  async auth3Signup(newUser: NewUser, apiKey: string) {
     if (
       newUser.account === '' ||
       newUser.email === '' ||
@@ -32,30 +32,33 @@ const web3AuthProvider = {
     ) {
       web3AuthProvider.authProviderData.isSignedUp = false;
       web3AuthProvider.authProviderData.authError = 'Can not use empty value to create user.';
-    }
-    const cuResult = await postUser(newUser,apiKey);
+    } else {
+      const cuResult = await postUser(newUser,apiKey);
     
-    if ('errors' in cuResult) {
-      web3AuthProvider.authProviderData.isSignedUp = false;
-      cuResult.errors.forEach((error: ErrorMultipleBody) => {
-        web3AuthProvider.authProviderData.authError += `${error.msg}.`;
-      })
+      if ('errors' in cuResult) {
+        console.log('found errors:', cuResult);
+        web3AuthProvider.authProviderData.isSignedUp = false;
+        cuResult.errors.forEach((error: ErrorMultipleBody) => {
+          web3AuthProvider.authProviderData.authError += `${error.msg}.`;
+        });
+      } else if ('error' in cuResult) {
+        console.log('found error:', cuResult);
+        web3AuthProvider.authProviderData.isSignedUp = false;
+        web3AuthProvider.authProviderData.authError += cuResult.error;
+      } else {
+        console.log('no error:', cuResult);
+        web3AuthProvider.authProviderData.isSignedUp = true;
+      }
     }
-
-    if ('error' in cuResult) {
-      web3AuthProvider.authProviderData.isSignedUp = false;
-      web3AuthProvider.authProviderData.authError += cuResult.error;
-    }
-    web3AuthProvider.authProviderData.isSignedUp = true;
-    callback();
+    return web3AuthProvider.authProviderData;
   },
-  async auth3Signin(userAuthData: UserAuthData, apiKey: string, callback: VoidFunction) {
-    callback();
+  async auth3Signin(userAuthData: UserAuthData, apiKey: string) {
+    return web3AuthProvider.authProviderData;
   },
-  async auth3SSO(apiKey: string,callback: VoidFunction) {
-    callback();
+  async auth3SSO(apiKey: string) {
+    return web3AuthProvider.authProviderData;
   },
-  async auth3Signout(apiKey: string,callback: VoidFunction) {
+  async auth3Signout(apiKey: string) {
     web3AuthProvider.authProviderData =  {
       isAuthenticated: false,
       isSignedUp: false,
@@ -74,7 +77,6 @@ const web3AuthProvider = {
         lastLogin: 0,
       },
     }
-    callback();
   },
 };
   
