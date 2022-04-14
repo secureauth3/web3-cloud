@@ -1,11 +1,9 @@
 import React from "react";
-import { ButtonProps } from "../../components/Button/Button";
-import { FormProps } from "../../components/Form/Form";
 import { web3AuthProvider } from "./auth3";
 
 export interface AuthContextType {
-  auth3Signup: (userAuthData: FormProps | ButtonProps, callback: VoidFunction) => void;
-  auth3Signin: (userAuthData: FormProps| ButtonProps, callback: VoidFunction) => void;
+  auth3Signup: (newUser: NewUser, callback: VoidFunction) => void;
+  auth3Signin: (userAuthData: UserAuthData, callback: VoidFunction) => void;
   auth3SSO: (callback: VoidFunction) => void;
   auth3Signout: (callback: VoidFunction) => void;
 }
@@ -23,39 +21,47 @@ export interface SecureAuth3ProviderProps {
   appId: string;
 }
 
+export interface NewUser {
+  account: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  ens: string;
+  chainId: number;
+  permissionFlag: number;
+}
+
+export interface UserAuthData {
+  address:string;
+  email: string;
+  signature: string;
+  message: string;
+}
+
 let AuthContext = React.createContext<AuthContextType>(null!);
 
 export function SecureAuth3Provider({ children, apiKey, appId}: SecureAuth3ProviderProps) {
 
-  let auth3Signup = (newUser: FormProps | ButtonProps, callback: VoidFunction) => {
-    return web3AuthProvider.auth3Signup(newUser, apiKey, () => {
+  let auth3Signup = (newUser: NewUser, callback: VoidFunction) => {
+    return web3AuthProvider.auth3Signup(newUser, apiKey,() => {
       callback();
     });
   };
 
-  let auth3Signin = (newUser: FormProps | ButtonProps, callback: VoidFunction) => {
-    return web3AuthProvider.auth3Signin(newUser, apiKey, () => {
-      if (web3AuthProvider.isAuthenticated) {
-        // dispatch(setUser(web3AuthProvider.user));
-        // dispatch(setAccesToken(web3AuthProvider.accessToken));
-      }
+  let auth3Signin = (userAuthData: UserAuthData, callback: VoidFunction) => {
+    return web3AuthProvider.auth3Signin(userAuthData, apiKey, () => {
       callback();
-      });
+    });
   };
 
   let auth3SSO = (callback: VoidFunction) => {
     return web3AuthProvider.auth3SSO(apiKey, () => {
-      if (web3AuthProvider.isAuthenticated) {
-        // dispatch(setUser(web3AuthProvider.user));
-        // dispatch(setAccesToken(web3AuthProvider.accessToken));
-      }
       callback();
     });
   };
 
   let auth3Signout = (callback: VoidFunction) => {
     return web3AuthProvider.auth3Signout(apiKey, () => {
-      // dispatch(signOutAccount());
       callback();
     });
   };

@@ -1,44 +1,53 @@
-import { AuthData } from "./SecureAuth3Provider";
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AuthData, NewUser } from "./SecureAuth3Provider";
 
-const API_PREFIX = '';
+const API_PREFIX = 'http://localhost:8080';
 
-export async function postUser(
-  account: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  ens: string,
-  chainId: number,
-  apiKey: string
-  ) {
-  const requestOptionsCreate = {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
+export interface PostUserReponse {
+  id: string
+}
+
+export interface ErrorResponse {
+  error: string;
+}
+
+export interface ErrorMultipleBody {
+  value: any;
+  msg: string;
+  parmam: string;
+  location: string;
+}
+
+export interface ErrorResponseMultiple {
+  errors: ErrorMultipleBody [];
+}
+
+
+export async function postUser(newUser: NewUser, apiKey: string): Promise<PostUserReponse | ErrorResponse | ErrorResponseMultiple> {
+  try {
+    const payload = {
+      account: newUser.account,
+      email: newUser.email,
+      firstName: newUser.email,
+      lastName: newUser.lastName,
+      ens: newUser.ens,
+      permissionFlag: newUser.permissionFlag,
+      chainId: newUser.chainId
+    };
+
+    const config: AxiosRequestConfig = {
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
       },
-    body: JSON.stringify(
-      { 
-        account: account,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        ens: ens,
-        chainId: chainId
-      }
-    )
-  };
+      withCredentials: false
+    }
 
-  return new Promise<{ data: any }>((resolve, reject) => {
-    fetch(`${API_PREFIX}/api/v1/users`, requestOptionsCreate)
-    .then(response => response.json())
-    .then(data => {
-      resolve({ data: data })
-    })
-    .catch(() => {
-      reject({data: null});
-    });
-  });
+    const res = await axios.post(`${API_PREFIX}/api/v1/owners`, payload, config);
+    return res.data;
+  } catch (err) {
+    return {error: 'Error creating user.'}
+  }
 }
 
 export async function verify(web3Values: AuthData, apiKey: string) {
