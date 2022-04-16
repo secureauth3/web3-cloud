@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Modal from 'react-modal';
-import { ACTION_TPYE, Backend, ButtonSignatureData, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
+import { ACTION_TPYE, ButtonSignatureData, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
 import { Web3Service } from "../../services/Web3Service/Web3Service";
 import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
 import metamaskLogo from '../../assets/metamask.png';
@@ -18,7 +18,6 @@ export interface ButtonProps {
     dappname: string;
     infuraId: string;
     messageToSign: string;
-    backend?: Backend
 }
 
 export function Button({
@@ -31,7 +30,6 @@ export function Button({
     dappname,
     infuraId,
     messageToSign,
-    backend
     }: ButtonProps) {
 
     const buttonStyle = {
@@ -135,7 +133,6 @@ export function Button({
                 window.location.origin,
                 window.location.host,
                 providerResult.provider,
-                backend,
               );
 
             // close modal and update state to provider state

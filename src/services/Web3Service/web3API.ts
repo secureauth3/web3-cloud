@@ -1,19 +1,19 @@
-import { Backend } from "../../interface/web3-data-interface";
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-export async function fetchNonce(backend: Backend) {
-    return new Promise<{ nonce: string }>((resolve, reject) => {
-      fetch(backend.endpoint, 
-        {credentials: 'include', ...backend.requestOptions})
-      .then(async (response) => {
-        if (response.status !== 200) {
-            resolve({ nonce: ''})
-        } else {
-            resolve({ nonce: await response.text()})
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        resolve({nonce: ''});
-      });
-    });
+const API_PREFIX = 'http://localhost:8080/api/v1';
+
+export interface NonceReponse {
+  nonce: string
+}
+
+export async function fetchAuth3Nonce(): Promise<NonceReponse> {
+  try {
+    const config: AxiosRequestConfig = {
+      withCredentials: true
+    }
+    const res: AxiosResponse = await axios.get(`${API_PREFIX}/auth/nonce`, config);
+    return {nonce: await res.data};
+  } catch (err: any) {
+      return {nonce: ''}
+  }
 }

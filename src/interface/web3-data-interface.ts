@@ -15,7 +15,7 @@ export interface FormSignatureData {
     lastName?: string;
     message: string;
     nonceSetFromBackend: boolean;
-    web3Provider: ethers.providers.Web3Provider | null;
+    web3Provider: ethers.providers.Web3Provider;
 }
   
 export interface ButtonSignatureData {
@@ -30,21 +30,13 @@ export interface ButtonSignatureData {
     ens: string;
     message: string;
     nonceSetFromBackend: boolean;
-    web3Provider: ethers.providers.Web3Provider | null;
+    web3Provider: ethers.providers.Web3Provider;
 }
 
 export interface ErrorMessageData {
     actionType: string;
     verificationType: string;
     message: string;
-}
-
-export interface Backend {
-    endpoint: string,
-    requestOptions: {
-        method: string,
-        headers?: any
-    }
 }
 
 export const enum ACTION_TPYE {

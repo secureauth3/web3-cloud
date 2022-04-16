@@ -81,15 +81,6 @@ interface FormProps {
   homePageurl: string;
   disableErrorDisplay: boolean;
   messageToSign: string;
-  backend?: Backend
-}
-
-interface Backend {
-  endpoint: string,
-  requestOptions: {
-    method: string,
-    headers?: any
-  }
 }
 
 
@@ -109,7 +100,7 @@ interface FormSignatureData {
   lastName?: string;
   message: string;
   nonceSetFromBackend: boolean;
-  web3Provider: ethers.providers.Web3Provider | null;
+  web3Provider: ethers.providers.Web3Provider;
 }
 
 // Form component error callback data types
@@ -134,7 +125,6 @@ Form component of callback data (FormSignatureData)
 | signature | string | String that contains signature data
 | message | string | String that contains message that account signed
 | provideType | string | name of Wallet provider (metamask, wallet-connect)
-| nonceSetFromBackend | boolean | set to true when nonce in message comes from backend endpoint
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
 
 
@@ -186,44 +176,19 @@ export default function AuthPage() {
 
 return (
   <div>
-      {/* Option 2 - With nonce backend */}
-      <Form
-        primary={true}
-        backgroundcolor='green'
-        size='large'
-        dappname='Your Brand Here'
-        infuraId='<your infura id>'
-        logourl='<your dapp logo image url>'
-        homePageurl='<your dapp home page url>'
-        disableErrorDisplay={false}
-        messageToSign={'Your message that users will sign'}
-        backend={{
-            endpoint: 'https://my.api.com/nonce',
-            requestOptions: {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer ${apiKey}`
-              }
-            }
-          }}
-        formDataCallback={web3DataCallback}
-        formErrorCallback={web3formErrorcallback}
-      />
-
-      {/* Option 2 - Without nonce backend   */}
-      <Form
-        primary={true}
-        backgroundcolor='green'
-        size='large'
-        dappname='Web3 Cloud'
-        infuraId='<your infura id>'
-        logourl='<your dapp logo image url>'
-        homePageurl='<your dapp home page url>'
-        disableErrorDisplay={false}
-        messageToSign={'Your message that users will sign'}
-        formDataCallback={web3DataCallback}
-        formErrorCallback={web3formErrorcallback}
-      />
+    <Form
+      primary={true}
+      backgroundcolor='green'
+      size='large'
+      dappname='Web3 Cloud'
+      infuraId='<your infura id>'
+      logourl='<your dapp logo image url>'
+      homePageurl='<your dapp home page url>'
+      disableErrorDisplay={false}
+      messageToSign={'Your message that users will sign'}
+      formDataCallback={web3DataCallback}
+      formErrorCallback={web3formErrorcallback}
+    />
     </div>
   );
 }
@@ -264,15 +229,6 @@ interface ButtonProps {
   dappname: string;
   infuraId: string;
   messageToSign: string;
-  backend?: Backend
-}
-
-interface Backend {
-  endpoint: string,
-  requestOptions: {
-    method: string,
-    headers?: any
-  }
 }
 
 // Button component signature callback data types 
@@ -288,7 +244,7 @@ interface ButtonSignatureData {
   ens: string;
   message: string;
   nonceSetFromBackend: boolean;
-  web3Provider: ethers.providers.Web3Provider | null;
+  web3Provider: ethers.providers.Web3Provider;
 }
 
 // Button component error callback data types
@@ -310,7 +266,6 @@ Button component of callback data (ButtonSignatureData)
 | signature | string | String that contains signature data
 | message | string | String that contains message that account signed
 | provideType | string | name of Wallet provider (metamask, wallet-connect)
-| nonceSetFromBackend | boolean | set to true when nonce in message comes from backend endpoint
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
 
 
@@ -362,40 +317,17 @@ export default function AuthPageWithButton() {
 
 return (
   <div>
-      {/* Option 2 - With nonce backend */}
-      <Button
-        primary={true}
-        backgroundcolor='green'
-        size='large'
-        buttonlabel='Sign in with wallet'
-        dappname='Your Brand Here'
-        infuraId='<your infura id>'
-        messageToSign={'Your message that users will sign'}
-        backend={{
-            endpoint: 'https://my.api.com/nonce',
-            requestOptions: {
-              method: 'GET',
-              headers: {
-                'Authorization': `Bearer <apiKey>`
-              }
-            }
-        }}
-        buttonDataCallback={web3DataCallback}
-        buttonErrorCallback={web3buttonErrorcallback}
-      />
-
-      {/* Option 2 - Without nonce backend   */}
-      <Button
-        primary={true}
-        backgroundcolor='green'
-        size='large'
-        buttonlabel='Sign in with wallet'
-        dappname='Your Brand Here'
-        infuraId='<your infura id>'
-        messageToSign={'Your message that users will sign'}
-        buttonDataCallback={web3DataCallback}
-        buttonErrorCallback={web3formErrorcallback}
-      />
+    <Button
+      primary={true}
+      backgroundcolor='green'
+      size='large'
+      buttonlabel='Sign in with wallet'
+      dappname='Your Brand Here'
+      infuraId='<your infura id>'
+      messageToSign={'Your message that users will sign'}
+      buttonDataCallback={web3DataCallback}
+      buttonErrorCallback={web3formErrorcallback}
+    />
     </div>
   );
 }

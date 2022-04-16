@@ -6,19 +6,21 @@ export interface Auth3ProviderData {
   isSignedUp: boolean;
   accessToken: string;
   authError: string;
-  user: {
-    account: string;
-    email: string;
-    dappName: string;
-    firstName: string;
-    lastName: string;
-    ens: string;
-    chainId: number;
-    permissionType: string;
-    permissionFlags: number;
-    lastLogin: number;
-  }
+  user: VerifiedAuth3User;
 } 
+
+export interface VerifiedAuth3User {
+  account: string;
+  email: string;
+  dappName: string;
+  firstName: string;
+  lastName: string;
+  ens: string;
+  chainId: number;
+  permissionType: string;
+  permissionFlags: number;
+  lastLogin: number;
+}
 
 export interface AuthData {
   address: string;
@@ -33,7 +35,7 @@ export interface SecureAuth3ProviderProps {
   appId: string;
 }
 
-export interface NewUser {
+export interface NewAuth3User {
   account: string;
   email: string;
   firstName: string;
@@ -51,27 +53,24 @@ export interface UserAuthData {
 }
 
 export interface AuthContextType {
-  auth3Signup: (newUser: NewUser) => Promise<Auth3ProviderData>;
+  auth3Signup: (newUser: NewAuth3User) => Promise<Auth3ProviderData>;
   auth3Signin: (userAuthData: UserAuthData) => Promise<Auth3ProviderData>;
   auth3SSO: (callback: VoidFunction) => Promise<Auth3ProviderData>;
-  auth3Signout: (callback: VoidFunction) => void;
+  auth3Signout: () => Promise<Auth3ProviderData>;
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!);
 
 export function SecureAuth3Provider({ children, apiKey, appId}: SecureAuth3ProviderProps) {
-  let auth3Signup = async (newUser: NewUser) => {
-    console.log('current state:', web3AuthProvider.authProviderData);
+  let auth3Signup = async (newUser: NewAuth3User) => {
     return await web3AuthProvider.auth3Signup(newUser, apiKey);
   };
 
   let auth3Signin = async (userAuthData: UserAuthData) => {
-    console.log('current state:', web3AuthProvider.authProviderData);
     return await web3AuthProvider.auth3Signin(userAuthData, apiKey);
   };
 
   let auth3SSO = async () => {
-    console.log('current state:', web3AuthProvider.authProviderData);
     return await web3AuthProvider.auth3SSO(apiKey);
   };
 

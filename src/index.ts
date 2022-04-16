@@ -2,3 +2,4 @@
 export * from './components/Form';
 export * from './components/Button';
 export * from './context/SecureAuth3Provider';
+export * from './interface/web3-data-interface';
