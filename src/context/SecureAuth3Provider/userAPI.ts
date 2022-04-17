@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { API_PREFIX } from '../../utils/web3-utils';
 import { AuthData, NewAuth3User } from "./SecureAuth3Provider";
-
-const API_PREFIX = 'http://localhost:8080/api/v1';
 
 export interface PostUserReponse {
   id: string
@@ -9,6 +8,15 @@ export interface PostUserReponse {
 
 export interface VerifyUserReponse {
   accessToken: string
+}
+
+export interface RefreshTokenUserReponse {
+  accessToken: string;
+  address: string;
+}
+
+export interface SignoutUserReponse {
+  info: string
 }
 
 export interface FetchUserReponse {
@@ -102,48 +110,46 @@ export async function verify(web3Values: AuthData, apiKey: string): Promise<Veri
   }
 }
 
-export async function signOut(apiKey: string) {
-  const requestOptionsGetUser: any = {
-    method: 'GET',
-    credentials: 'include', // Don't forget to specify this if you need cookies
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
+export async function signOut(apiKey: string): Promise<SignoutUserReponse | ErrorResponse> {
+  try {
+    const config: AxiosRequestConfig = {
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
       },
-  };
+      withCredentials: true
+    }
 
-  return new Promise<{ data: any }>((resolve, reject) => {
-    fetch(`${API_PREFIX}/api/v1/auth/sign-out`, requestOptionsGetUser)
-    .then(response => response.json())
-    .then(data => {
-      resolve({ data: data })
-    })
-    .catch(() => {
-      reject({data: null});
-    });
-  });
+    const res: AxiosResponse = await axios.get(`${API_PREFIX}/auth/sign-out`, config);
+    return res.data;
+  } catch (err: any) {
+    if ('err.response.data' in err) {
+      return err.response.data;
+    } else {
+      return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
+    }
+  }
 }
 
-export async function refreshToken(apiKey: string) {
-  const requestOptionsGetUser: any = {
-    method: 'GET',
-    credentials: 'include', // Don't forget to specify this if you need cookies
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
+export async function refreshToken(apiKey: string): Promise<RefreshTokenUserReponse | ErrorResponse> {
+  try {
+    const config: AxiosRequestConfig = {
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
       },
-  };
+      withCredentials: true
+    }
 
-  return new Promise<{ data: any }>((resolve, reject) => {
-    fetch(`${API_PREFIX}/auth/refresh-token`, requestOptionsGetUser)
-    .then(response => response.json())
-    .then(data => {
-      resolve({ data: data })
-    })
-    .catch(() => {
-      reject({data: null});
-    })
-  });
+    const res: AxiosResponse = await axios.get(`${API_PREFIX}/auth/refresh-token`, config);
+    return res.data;
+  } catch (err: any) {
+    if ('err.response.data' in err) {
+      return err.response.data;
+    } else {
+      return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
+    }
+  }
 }
 
 export async function fetchUser(account: string, accessToken: string, apiKey: string): Promise<FetchUserReponse | ErrorResponse> {

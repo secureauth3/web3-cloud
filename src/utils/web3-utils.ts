@@ -16,3 +16,5 @@ export const isEmpty = (value: string) => {
 export const generateNonce = (): string => {
 	return randomStringForEntropy(96);
 }
+
+export const API_PREFIX = 'http://localhost:8080/api/v1';

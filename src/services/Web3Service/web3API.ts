@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-
-const API_PREFIX = 'http://localhost:8080/api/v1';
+import { API_PREFIX } from '../../utils/web3-utils';
 
 export interface NonceReponse {
   nonce: string

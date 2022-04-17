@@ -1,5 +1,5 @@
 import { Auth3ProviderData, NewAuth3User, UserAuthData } from "./SecureAuth3Provider";
-import { ErrorMultipleBody, fetchUser, postUser, verify } from "./userAPI";
+import { ErrorMultipleBody, fetchUser, postUser, refreshToken, signOut, verify } from "./userAPI";
 
 const web3AuthProvider = {
   authProviderData: {
@@ -91,28 +91,57 @@ const web3AuthProvider = {
     return web3AuthProvider.authProviderData;
   },
   async auth3SSO(apiKey: string) {
+    const refreshResult = await refreshToken(apiKey);
+    if ('error' in refreshResult) {
+      console.log('refresh found error:', refreshResult);
+      web3AuthProvider.authProviderData.isAuthenticated = false;
+      web3AuthProvider.authProviderData.authError = refreshResult.error;
+    } else {
+      console.log('no refresh error:', refreshResult);
+      // valid refresh token now fetch data
+      const fetchUserResult = await fetchUser(refreshResult.address, refreshResult.accessToken, apiKey);
+      if ('error' in fetchUserResult) {
+        console.log('fetch user found error:', fetchUserResult);
+        web3AuthProvider.authProviderData.isAuthenticated = false;
+        web3AuthProvider.authProviderData.authError = fetchUserResult.error;
+      } else {
+        web3AuthProvider.authProviderData.isAuthenticated = true;
+        web3AuthProvider.authProviderData.accessToken = refreshResult.accessToken;
+        web3AuthProvider.authProviderData.isSignedUp = true;
+        web3AuthProvider.authProviderData.user = fetchUserResult;
+      }
+    }
     return web3AuthProvider.authProviderData;
   },
   async auth3Signout(apiKey: string) {
-    return web3AuthProvider.authProviderData =  {
-      isAuthenticated: false,
-      isSignedUp: false,
-      accessToken: '',
-      authError: '',
-      user: {
-        account: '',
-        email: '',
-        dappName: '',
-        firstName: '',
-        lastName: '',
-        ens: '',
-        chainId: 0,
-        permissionType: '',
-        permissionFlags: 0,
-        lastLogin: 0,
-      },
+    const signOutResult = await signOut(apiKey);
+
+    if ('error' in signOutResult) {
+      console.log('sign out found error:', signOutResult);
+      web3AuthProvider.authProviderData.authError = signOutResult.error;
+      return web3AuthProvider.authProviderData;
+    } else {
+      console.log('not sign out error:', signOutResult);
+      return web3AuthProvider.authProviderData =  {
+        isAuthenticated: false,
+        isSignedUp: false,
+        accessToken: '',
+        authError: '',
+        user: {
+          account: '',
+          email: '',
+          dappName: '',
+          firstName: '',
+          lastName: '',
+          ens: '',
+          chainId: 0,
+          permissionType: '',
+          permissionFlags: 0,
+          lastLogin: 0,
+        },
+      }
     }
-  },
+  }
 };
   
 export { web3AuthProvider };

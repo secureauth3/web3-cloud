@@ -55,7 +55,7 @@ export interface UserAuthData {
 export interface AuthContextType {
   auth3Signup: (newUser: NewAuth3User) => Promise<Auth3ProviderData>;
   auth3Signin: (userAuthData: UserAuthData) => Promise<Auth3ProviderData>;
-  auth3SSO: (callback: VoidFunction) => Promise<Auth3ProviderData>;
+  auth3SSO: () => Promise<Auth3ProviderData>;
   auth3Signout: () => Promise<Auth3ProviderData>;
 }
 
