@@ -33,9 +33,7 @@ Please follow the [Coding Style](https://github.com/V00D00-child/web3-cloud/blob
 
 ### Code of Conduct
 
-
-This project adheres to the [Contributor Covenant Code of Conduct](https://github.com/V00D00-child/web3-cloud/blob/main/CODE_OF_CONDUCT.md
-). By participating, you are expected to honor this code.
+This project adheres to the [Contributor Covenant Code of Conduct](https://github.com/V00D00-child/web3-cloud/blob/main/CODE_OF_CONDUCT.md). By participating, you are expected to honor this code.
 
 ## License
 

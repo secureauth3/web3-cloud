@@ -1,21 +1,22 @@
-# Web3 Cloud
+<div align="center" style="background-color:#6555DF">
+  <a href="https://www.secureauth3.com">
+  <img width= "300px" height="300px" src="https://cdn.errandboys.co/images/Original.png" class="attachment-full size-full" alt="Easily onboard Web3 users." loading="lazy" /></a>
+</div>
 
-Simple Sign-up, Sign In Ethereum account authenticator. Power by Sign-In with Ethereum.
+<h2 align="center">(Simple Web3 onboarding with Ethereum wallets.)</h2>
 
-Web3-Cloud is a React component library designed to create simple secure User Sign-up, Sign In. Generate [EIP-1271 signatures](https://eips.ethereum.org/EIPS/eip-1271)
+<br>
 
-## Coming soon(Join waiting list)
-[Secure Auth3](https://www.secureauth3.com/)
-The perfect solution for Developers who want integrate Web3 sign-in/sign-up into their applications. Auth3 API was built to provide a new web3 authentication model that give users more control over their digital identity without the need for legacy password ownership models.
+<div align=“center”>
+
+[![web3-cloud](https://snyk.io/advisor/npm-package/web3-cloud/badge.svg)](https://snyk.io/advisor/npm-package/web3-cloud)
+
+</div>
+
+# `web3-cloud`
+Web3-cloud serves as a React wrapper around Sign-In with Ethereum and Secure Auth3, to easily integrate Web3 sign-in/sign-up onboarding, and manage personal data. [Learn more](https://www.secureauth3.com/) about the all the functionalities that Secure Auth3 offers.
 
 ---
-
-## Quick start application
-- repo: https://github.com/V00D00-child/web3-cloud-quick-start
-- view live: https://www.findmynft.org/
-
-## Device support
-(Desktop, tablet, Mobile)
 
 ## Requirements
 - 4.14.0 of MetaMask
@@ -23,13 +24,15 @@ The perfect solution for Developers who want integrate Web3 sign-in/sign-up into
 - @walletconnect/web3-provider - 1.7.1 (https://www.npmjs.com/package/@walletconnect/web3-provider)
 - react - 17.0.2 (https://www.npmjs.com/package/react)
 - react-dom - 17.0.2 (https://www.npmjs.com/package/react-dom)
----
+
+## Device support
+(Desktop, tablet, Mobile)
 
 ## Webpack v5 support
 There are a lot of breaking changes in Webpack v5. Set up your project to work with web3-cloud library:
 
 #### configuring Webpack v5
-We highly recommend you to use the stable 4.0.3 version of Webpack. If you want to use web3-cloud on your project with Webpack v5 you need to add the fallback to your ```webpack.config.js``` file:
+We highly recommend you to use the stable ```npm i react-scripts@4.0.3``` version of Webpack. If you want to use web3-cloud on your project with Webpack v5 you need to add the fallback to your ```webpack.config.js``` file:
 
 ```javascript
 module.exports = {
@@ -46,16 +49,28 @@ module.exports = {
 };
 ```
 
+---
+
 ## Install
 
 ```
 $ npm install web3-cloud
 ```
 
+## API Key
+If you would like to use our Web3 Authentication provider feature an API key is required.
+Please register your app with Secure Auth3 to obtain a API key(no credit card required). 
+- [Get an API key](https://www.secureauth3.com/)
+
+
 ## List of components  
 - Form component
 - Single Sign on button component
-- Web3 Authentication provider component (coming soon)
+- Web3 Authentication provider component
+
+---
+
+
 ### Form component 
 - Description: Dapp UI Form component for Ethereum wallet sign in/sign up
 - Features:
@@ -136,7 +151,7 @@ Form component error callback data (ErrorMessageData)
 | message | string | Error message
 
 
-### Usage (React component)
+### Usage (Form component)
 - (Example implementation using React)
 ```jsx
 import { Form } from "web3-cloud";
@@ -277,7 +292,7 @@ Button component error callback data (ErrorMessageData)
 | message | string | Error message
 
 
-### Usage (React component)
+### Usage (Button component)
 - (Example implementation using React)
 ```jsx
 import { Button } from "web3-cloud";
@@ -333,7 +348,12 @@ return (
 }
 ```
 
-## Local dev
+---
+
+## How to Contributors
+Please take a look at our the [Contributing.md](https://github.com/V00D00-child/web3-cloud/blob/main/CONTRIBUTING.md).
+
+### Local dev
 1. Install Dependencies
 ```
 $ npm install
@@ -344,7 +364,7 @@ $ npm install
 $ npm run storybook
 ```
 
-## Local testing
+### Local testing
 1. Run Unit test with coverage
 ```
 $ npm run test:coverage
@@ -360,5 +380,7 @@ $ npm run test:coverage
 $ npm run clear:jest
 ```
 
-## Authors
+---
+
+## Contributors
 *  [Idris Bowman](https://www.linkedin.com/in/idris-bowman)
