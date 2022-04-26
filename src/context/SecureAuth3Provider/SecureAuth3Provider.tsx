@@ -32,7 +32,6 @@ export interface AuthData {
 export interface SecureAuth3ProviderProps {
   children: React.ReactNode;
   apiKey: string;
-  appId: string;
 }
 
 export interface NewAuth3User {
@@ -61,7 +60,7 @@ export interface AuthContextType {
 
 let AuthContext = React.createContext<AuthContextType>(null!);
 
-export function SecureAuth3Provider({ children, apiKey, appId}: SecureAuth3ProviderProps) {
+export function SecureAuth3Provider({ children, apiKey}: SecureAuth3ProviderProps) {
   let auth3Signup = async (newUser: NewAuth3User) => {
     return await web3AuthProvider.auth3Signup(newUser, apiKey);
   };

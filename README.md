@@ -1,15 +1,18 @@
-<div align="center" style="background-color:#6555DF">
+<p align="center" style="background-color:#6555DF">
   <a href="https://www.secureauth3.com">
   <img width= "300px" height="300px" src="https://cdn.errandboys.co/images/Original.png" class="attachment-full size-full" alt="Easily onboard Web3 users." loading="lazy" /></a>
-</div>
+</p>
 
-<h2 align="center">(Simple Web3 onboarding with Ethereum wallets.)</h2>
+<h2 align="center">(Simple Web3 onboarding with Ethereum wallets.) 🔐</h2>
 
 <br>
 
-<div align=“center”>
+<div align="center">
 
 [![web3-cloud](https://snyk.io/advisor/npm-package/web3-cloud/badge.svg)](https://snyk.io/advisor/npm-package/web3-cloud)
+![npm type definitions](https://img.shields.io/npm/types/web3-cloud)
+![GitHub last commit](https://img.shields.io/github/last-commit/V00D00-child/web3-cloud)
+
 
 </div>
 
@@ -17,6 +20,13 @@
 Web3-cloud serves as a React wrapper around Sign-In with Ethereum and Secure Auth3, to easily integrate Web3 sign-in/sign-up onboarding, and manage personal data. [Learn more](https://www.secureauth3.com/) about the all the functionalities that Secure Auth3 offers.
 
 ---
+
+## Quick start
+- Use this sample application to quickly start working with web3cloud:
+- repo: https://github.com/V00D00-child/web3-cloud-quick-start
+- view live: https://www.findmynft.org/
+---
+
 
 ## Requirements
 - 4.14.0 of MetaMask
@@ -63,15 +73,133 @@ Please register your app with Secure Auth3 to obtain a API key(no credit card re
 - [Get an API key](https://www.secureauth3.com/)
 
 
-## List of components  
-- Form component
-- Single Sign on button component
-- Web3 Authentication provider component
+# 🗺️ Table of contents 
+- [`web3-cloud`](#web3-cloud)
+- [Quick start](#quick-start)
+- [Web3 Authentication provider](#web3-authentication-provider)
+- [Form component](#form-component)
+- [Button component](#button-component)
+- [Hooks](#hooks)
+
+---
+
+## Web3 Authentication provider
+- Wrap your app in a <SecureAuth3Provider>, and provide your apiKey:
+
+```tsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { SecureAuth3Provider } from 'web3-cloud';
+
+ReactDOM.render(
+  <SecureAuth3Provider apiKey="xxxxxxxxxxx">
+    <App />
+  </SecureAuth3Provider>
+  document.getElementById('root')
+);
+```
+
+And call the hooks inside your apps auth page:
+```tsx
+import React from "react";
+import { ErrorMessageData, Form, FormSignatureData, NewAuth3User, useAuth } from "web3-cloud";
+
+export default function AuthPage() {
+  const auth = useAuth();
+
+  const authCallbackData = useCallback(async (web3Values: FormSignatureData) => {
+    try {
+      switch(web3Values.actionType) {
+        case 'SIGN_UP':
+          // Secure Auth3 - Sign up user
+          const signUpResults = await auth.auth3Signup(
+              {
+              account: web3Values.address,
+              email: web3Values.email,
+              firstName: web3Values.firstName? web3Values.firstName : 'First'
+              lastName: web3Values.lastName? web3Values.lastName : 'Last',
+              ens: web3Values.ens,
+              chainId: web3Values.chainId,
+              permissionFlag: 3,
+            } as NewAuth3User
+          );
+       
+          // Secure Auth3 - Sign in user after account creation sucessful
+          const signInResults = await auth.auth3Signin({
+            address: web3Values.address,
+            email: web3Values.email,
+            signature: web3Values.signature,
+            message: web3Values.message
+          });
+          break;
+        case 'SIGN_IN':
+          // Secure Auth3 - Sign in user
+          const signInResults2 = await auth.auth3Signin({
+            address: web3Values.address,
+            email: web3Values.email,
+            signature: web3Values.signature,
+            message: web3Values.message
+          });
+          break;
+        default:
+          break;
+      }
+    } catch(err) {
+        console.log(err);
+    }  
+  }, [auth]);
+  
+  const authCallbackError = useCallback((error: ErrorMessageData) => {
+    console.log(error.message);
+  }, []);
+
+  return (
+    <div>
+      <Form
+        primary={true}
+        backgroundcolor='#6555DF'
+        size='large'
+        dappname=''
+        disableErrorDisplay={false}
+        messageToSign=''
+        infuraId=''
+        homePageurl=''
+        formDataCallback={authCallbackData}
+        formErrorCallback={authCallbackError}   
+      />
+    </div>
+  );
+}
+```
 
 ---
 
 
-### Form component 
+## Hooks
+- useChainInfo
+
+### useChainInfo
+- Use this hook to get information about a chainId
+
+```jsx
+
+import React from "react";
+import { useChainInfo } from "web3-cloud";
+
+export default function AuthPage() {
+  const { getChainInfo } = useChainInfo();
+  return (
+    <div>
+      {getChainInfo(1)}
+    </div>
+  )
+}
+
+```
+
+---
+
+## Form component 
 - Description: Dapp UI Form component for Ethereum wallet sign in/sign up
 - Features:
   1. Sign in/Sign up: Responsive Form with validation (email, first name, last name)
@@ -153,7 +281,7 @@ Form component error callback data (ErrorMessageData)
 
 ### Usage (Form component)
 - (Example implementation using React)
-```jsx
+```tsx
 import { Form } from "web3-cloud";
 import { useCallback } from "react";
 
@@ -209,21 +337,9 @@ return (
 }
 ```
 
-<img src="readme-images/web3-cloud-connection-component-sign-up.jpg" width="100%" margin-bottom="5%" align="left" >
-
----
-<img src="readme-images/web3-cloud-connection-component-sign-in.jpg" width="100%" margin-bottom="5%" align="left" >
-
----
-<img src="readme-images/web3-cloud-connection-component-sign-providers.jpg" width="100%" margin-bottom="5%" align="left" >
-
----
-<img src="readme-images/web3-cloud-connection-component-sig-verifying.jpg" width="100%" margin-bottom="5%" align="left" >
-
 ---
 
-
-### Button component 
+## Button component 
 - Description: Dapp UI Form component for Ethereum wallet signature capture
 - Features:
   1. ENS Resolution
@@ -294,7 +410,7 @@ Button component error callback data (ErrorMessageData)
 
 ### Usage (Button component)
 - (Example implementation using React)
-```jsx
+```tsx
 import { Button } from "web3-cloud";
 import { useCallback } from "react";
 
