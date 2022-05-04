@@ -1,8 +1,7 @@
 import React from 'react';
 import { ErrorMessageData, FormSignatureData } from '../interface/web3-data-interface';
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { FormProps } from '../interface/form-interface';
-import { Form } from '../components/Form/Form';
+import { Form, FormProps } from '../components/Form/Form';
 
 export default {
   title: 'Components/Form',
@@ -26,15 +25,6 @@ const Template: ComponentStory<typeof Form> = (args: FormProps) =>
       logourl='https://idrisbowman.com/images/idrisBowmanIcon.jpg'
       homePageurl='https://idrisbowman.com/'
       disableErrorDisplay={false}
-      backend={{
-        endpoint: `${API_URL}/api/v1/auth/nonce`,
-        requestOptions: {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${apiKey}`
-          }
-        }
-      }}
       messageToSign={`Signing this unique message will produce a digital signature that we verify to prove ownership of your wallet. Please be aware that signing will not cost any gas!`}
       formDataCallback={(async (web3Values: FormSignatureData) => {
         web3data = web3Values;

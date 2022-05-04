@@ -4,7 +4,6 @@ import Modal from 'react-modal';
 import { CHAINID_NETWORK_MAP } from "../../services/service-constants";
 import { Web3Service } from "../../services/Web3Service/Web3Service";
 import { FormSignatureData, ACTION_TPYE, ErrorMessageData, Providers, VerifactionType } from "../../interface/web3-data-interface";
-import { FormProps } from '../../interface/form-interface';
 
 import metamaskLogo from '../../assets/metamask.png';
 import walletConnectLogo from '../../assets/walletConnect.png';
@@ -17,6 +16,20 @@ declare global {
     ethereum: any
     web3: any;
   }
+}
+
+export interface FormProps {
+  primary: boolean;
+  backgroundcolor: string; 
+  size: string; 
+  formDataCallback: (web3Data: FormSignatureData) => void;
+  formErrorCallback: (errorData: ErrorMessageData) => void;
+  dappname: string;
+  logourl: string;
+  infuraId: string;
+  homePageurl: string;
+  disableErrorDisplay: boolean;
+  messageToSign: string;
 }
 
 /**
@@ -34,7 +47,6 @@ export function Form({
   homePageurl,
   disableErrorDisplay,
   messageToSign,
-  backend
   }: FormProps) {
 
   const buttonStyle = {
@@ -135,7 +147,6 @@ export function Form({
         window.location.origin,
         window.location.host,
         providerResult.provider,
-        backend,
       );
 
       // close modal and update state to provider state

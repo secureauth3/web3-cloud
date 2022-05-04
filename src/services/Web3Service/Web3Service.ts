@@ -1,8 +1,8 @@
 import { ethers, providers } from 'ethers';
-import { Backend, ErrorMessageData, Providers } from '../../interface/web3-data-interface';
+import { ErrorMessageData, Providers } from '../../interface/web3-data-interface';
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { SiweMessage } from 'siwe';
-import { fetchNonce } from './web3API';
+import { fetchAuth3Nonce } from './web3API';
 
 const metamask = window.ethereum;
 
@@ -109,17 +109,13 @@ export class Web3Service {
         origin: string,
         doamin: string,
         provider: ethers.providers.Web3Provider,
-        backend: Backend | undefined
         ) {
         let siweMessage;
-        let nonce = '';
+        let nonceResult = await fetchAuth3Nonce();
+        console.log('nonce result:',nonceResult);
         const messageExpirationTime = new Date((Date.now() + (600000))).toISOString(); // signature expires in 10 mins
-
-        if (backend) {
-            const res = await fetchNonce(backend);
-            nonce = res.nonce;
-        }
-        if (nonce !== '') {
+    
+        if (nonceResult.nonce !== '') {
             siweMessage = new SiweMessage({
                 domain: doamin,
                 address,
@@ -127,7 +123,7 @@ export class Web3Service {
                 uri: origin,
                 version: '1',
                 chainId: chainId,
-                nonce: nonce,
+                nonce: nonceResult.nonce,
                 expirationTime: messageExpirationTime
             });
         } else {
@@ -148,7 +144,7 @@ export class Web3Service {
             return {
                 signature: signature,
                 message: messageToSign,
-                nonceSetFromBackend: nonce !==''? true : false
+                nonceSetFromBackend: nonceResult.nonce !==''? true : false
             };
         } catch (err) {
             throw err;

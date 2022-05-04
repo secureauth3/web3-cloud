@@ -1,18 +1,18 @@
 {
   "name": "web3-cloud",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Simple Sign-up, Sign In Ethereum account authenticator. Power by Sign-In with Ethereum.",
   "keywords": [
     "Ethereum",
     "web3",
     "authentication",
-    "auth",
-    "connect",
-    "signature"
+    "wallet connect",
+    "digital signatures",
+    "EIP-1271"
   ],
   "author": {
     "name": "Idris Bowman",
-    "email": "idris_bowman@idrisbowman.com",
+    "email": "contact@secureauth3.com",
     "url": "http://www.idrisbowman.com"
   },
   "homepage": "https://github.com/V00D00-child/web3-cloud#readme",
@@ -45,9 +45,11 @@
     "@storybook/addon-links": "6.3.12",
     "@storybook/react": "6.3.12",
     "@testing-library/react": "12.1.2",
+    "@reduxjs/toolkit": "^1.8.1",
     "@types/jest": "27.0.3",
     "@types/react": "17.0.34",
     "@types/react-modal": "^3.13.1",
+    "@types/react-redux": "^7.1.23",
     "babel-jest": "27.4.5",
     "babel-loader": "8.2.3",
     "identity-obj-proxy": "3.0.0",
@@ -66,8 +68,9 @@
     "@walletconnect/web3-provider": "1.7.1"
   },
   "peerDependencies": {
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": ">=17.0.2",
+    "react-dom": ">=17.0.2",
+    "react-redux": "^>=17.2.8",
     "@walletconnect/web3-provider": "1.7.1"
   },
   "scripts": {
@@ -78,13 +81,15 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "build-lib": "rm -rf dist/ && rollup -c",
-    "publish:lib": "npm run build-lib && npm login && npm publish"
+    "publish:lib": "npm run build-lib && npm login && npm publish",
+    "snyk:report": "snyk test --json | snyk-to-html -o snyk-report-results.html -s"
   },
   "dependencies": {
+    "@walletconnect/web3-provider": "1.7.1",
+    "axios": "^0.26.1",
     "bootstrap": "5.1.3",
-    "ethers": "5.5.2",
+    "ethers": "5.6.4",
     "react-modal": "3.14.4",
-    "siwe": "1.0.0",
-    "@walletconnect/web3-provider": "1.7.1"
+    "siwe": "1.0.0"
   }
 }

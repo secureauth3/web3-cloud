@@ -1,9 +1,8 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-
-import { Button } from '../components/Button';
 import { ButtonSignatureData, ErrorMessageData } from '../interface/web3-data-interface';
-import { ButtonProps } from '../interface/button-interface';
+import { Button, ButtonProps } from '../components/Button/Button';
+
 
 export default {
   title: 'Components/Button',
