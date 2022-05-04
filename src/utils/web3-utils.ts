@@ -17,4 +17,4 @@ export const generateNonce = (): string => {
 	return randomStringForEntropy(96);
 }
 
-export const API_PREFIX = 'http://localhost:8080/api/v1';
+export const API_PREFIX = 'https://api.secureauth3.com/api/v1';
