@@ -1,8 +1,3 @@
-<p align="center" style="background-color:#6555DF">
-  <a href="https://www.secureauth3.com">
-  <img width= "300px" height="300px" src="https://cdn.errandboys.co/images/Original.png" class="attachment-full size-full" alt="Easily onboard Web3 users." loading="lazy" /></a>
-</p>
-
 <h2 align="center">(Simple Web3 onboarding with Ethereum wallets.) 🔐</h2>
 
 <br>
