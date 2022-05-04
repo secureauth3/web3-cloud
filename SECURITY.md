@@ -1,6 +1,6 @@
 # Secure Auth3 Responsible Disclosure Policy
 
-If you have found a security vulnerability in any of the systems provided by Moralis we encourage you to report it to us ASAP.
+If you have found a security vulnerability in any of the systems provided by Secure Auth3 we encourage you to report it to us ASAP.
 We will investigate all legitimate reports and do our best to quickly fix the problem.
 
 Before making a report, please review this page to understand our disclosure policy and how to communicate with us.
