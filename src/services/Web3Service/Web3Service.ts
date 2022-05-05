@@ -112,7 +112,6 @@ export class Web3Service {
         ) {
         let siweMessage;
         let nonceResult = await fetchAuth3Nonce();
-        console.log('nonce result:',nonceResult);
         const messageExpirationTime = new Date((Date.now() + (600000))).toISOString(); // signature expires in 10 mins
     
         if (nonceResult.nonce !== '') {
@@ -144,7 +143,8 @@ export class Web3Service {
             return {
                 signature: signature,
                 message: messageToSign,
-                nonceSetFromBackend: nonceResult.nonce !==''? true : false
+                nonceSetFromBackend: nonceResult.nonce !==''? true : false,
+                token: nonceResult.token
             };
         } catch (err) {
             throw err;

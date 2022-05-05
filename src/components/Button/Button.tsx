@@ -162,7 +162,8 @@ export function Button({
                 signature: sigSIWE.signature,
                 message: sigSIWE.message,
                 nonceSetFromBackend: sigSIWE.nonceSetFromBackend,
-                web3Provider: providerResult.provider
+                web3Provider: providerResult.provider,
+                token: sigSIWE.token
             };
             buttonDataCallback(finalData);
         } catch (err: any) {

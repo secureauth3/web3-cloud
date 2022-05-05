@@ -5,6 +5,7 @@ export interface Auth3ProviderData {
   isAuthenticated: boolean;
   isSignedUp: boolean;
   accessToken: string;
+  refreshToken: string;
   authError: string;
   user: VerifiedAuth3User;
 } 
@@ -27,6 +28,7 @@ export interface AuthData {
   signature: string;
   message: string;
   email: string;
+  token: string;
 }
 
 export interface SecureAuth3ProviderProps {
@@ -49,12 +51,14 @@ export interface UserAuthData {
   email: string;
   signature: string;
   message: string;
+  token: string;
 }
 
 export interface AuthContextType {
   auth3Signup: (newUser: NewAuth3User) => Promise<Auth3ProviderData>;
   auth3Signin: (userAuthData: UserAuthData) => Promise<Auth3ProviderData>;
-  auth3SSO: () => Promise<Auth3ProviderData>;
+  auth3SSO: (refreshToken: string) => Promise<Auth3ProviderData>;
+  auth3RefreshAccess: (refreshToken: string) => Promise<Auth3ProviderData>;
   auth3Signout: () => Promise<Auth3ProviderData>;
 }
 
@@ -69,16 +73,19 @@ export function SecureAuth3Provider({ children, apiKey}: SecureAuth3ProviderProp
     return await web3AuthProvider.auth3Signin(userAuthData, apiKey);
   };
 
-  let auth3SSO = async () => {
-    return await web3AuthProvider.auth3SSO(apiKey);
+  let auth3SSO = async (refreshToken: string) => {
+    return await web3AuthProvider.auth3SSO(apiKey, refreshToken);
+  };
+
+  let auth3RefreshAccess = async (refreshToken: string) => {
+    return await web3AuthProvider.auth3RefreshAccess(apiKey, refreshToken);
   };
 
   let auth3Signout = async () => {
-    return await web3AuthProvider.auth3Signout(apiKey);
+    return await web3AuthProvider.auth3Signout();
   };
 
-
-  let value = { auth3Signup, auth3Signin, auth3SSO, auth3Signout };
+  let value = { auth3Signup, auth3Signin, auth3SSO, auth3RefreshAccess, auth3Signout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
