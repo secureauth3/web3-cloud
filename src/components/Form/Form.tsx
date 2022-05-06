@@ -177,7 +177,8 @@ export function Form({
           signature: sigSIWE.signature,
           message: sigSIWE.message,
           nonceSetFromBackend: sigSIWE.nonceSetFromBackend,
-          web3Provider: providerResult.provider
+          web3Provider: providerResult.provider,
+          token: sigSIWE.token
       };
 
       switch(web3Values.actionType) {

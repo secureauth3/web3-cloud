@@ -16,6 +16,7 @@ export interface FormSignatureData {
     message: string;
     nonceSetFromBackend: boolean;
     web3Provider: ethers.providers.Web3Provider;
+    token: string;
 }
   
 export interface ButtonSignatureData {
@@ -31,6 +32,7 @@ export interface ButtonSignatureData {
     message: string;
     nonceSetFromBackend: boolean;
     web3Provider: ethers.providers.Web3Provider;
+    token: string;
 }
 
 export interface ErrorMessageData {
