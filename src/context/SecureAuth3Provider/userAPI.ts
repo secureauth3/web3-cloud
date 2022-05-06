@@ -70,9 +70,9 @@ export async function postUser(newUser: NewAuth3User, apiKey: string): Promise<P
 
     const res: AxiosResponse = await axios.post(`${API_PREFIX}/users`, payload, config);
     return res.data;
-  } catch (err: any) {
-    if ('err.response.data' in err) {
-      return (err).response.data ;
+  } catch (error: any) {
+    if (error.response) {
+      return error.response.data;
     } else {
       return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
     }
@@ -98,19 +98,19 @@ export async function verify(web3Values: AuthData, apiKey: string): Promise<Veri
 
     const res: AxiosResponse = await axios.post(`${API_PREFIX}/auth/verify`, payload, config);
     return res.data;
-  } catch (err: any) {
-    if ('err.response.data' in err) {
-      return err.response.data;
+  } catch (error: any) {
+    if (error.response) {
+      return error.response.data;
     } else {
       return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
     }
   }
 }
 
-export async function refreshAccessToken(apiKey: string, freshToken: string): Promise<RefreshTokenUserReponse | ErrorResponse> {
+export async function refreshAccessToken(apiKey: string, freshToken: string): Promise<RefreshTokenUserReponse | ErrorResponse | ErrorResponseMultiple> {
   try {
     const payload = {
-      freshToken: freshToken
+      refreshToken: freshToken
     };
 
     const config: AxiosRequestConfig = {
@@ -122,9 +122,9 @@ export async function refreshAccessToken(apiKey: string, freshToken: string): Pr
 
     const res: AxiosResponse = await axios.post(`${API_PREFIX}/auth/refresh-token`, payload, config);
     return res.data;
-  } catch (err: any) {
-    if ('err.response.data' in err) {
-      return err.response.data;
+  } catch (error: any) {
+    if (error.response) {
+      return error.response.data;
     } else {
       return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
     }
@@ -142,9 +142,9 @@ export async function fetchUser(account: string, accessToken: string, apiKey: st
 
     const res: AxiosResponse = await axios.get(`${API_PREFIX}/users/${account}`, config);
     return res.data;
-  } catch (err: any) {
-    if ('err.response.data' in err) {
-      return err.response.data;
+  } catch (error: any) {
+    if (error.response) {
+      return error.response.data;
     } else {
       return {error: 'Could not to connect to Secure Auth API. Please check internet connection and try again.'}
     }

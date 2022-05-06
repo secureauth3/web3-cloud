@@ -31,6 +31,7 @@ const web3AuthProvider = {
       web3AuthProvider.authProviderData.isSignedUp = false;
       web3AuthProvider.authProviderData.authError = 'Can not use empty value to create user.';
     } else {
+      web3AuthProvider.authProviderData.authError = '';
       const cuResult = await postUser(newUser,apiKey);
     
       if ('errors' in cuResult) {
@@ -59,7 +60,8 @@ const web3AuthProvider = {
       web3AuthProvider.authProviderData.isAuthenticated = false;
       web3AuthProvider.authProviderData.authError = 'Can not use empty value to verify user.';
     } else {
-  
+
+      web3AuthProvider.authProviderData.authError = '';
       const verifyUserResult = await verify(userAuthData,apiKey);
       if ('errors' in verifyUserResult) {
         web3AuthProvider.authProviderData.isAuthenticated = false;
@@ -87,11 +89,17 @@ const web3AuthProvider = {
     }
     return web3AuthProvider.authProviderData;
   },
-  async auth3SSO(apiKey: string, freshToken: string) {
-    const refreshResult = await refreshAccessToken(apiKey, freshToken);
+  async auth3SSO(apiKey: string, refreshToken: string) {
+    web3AuthProvider.authProviderData.authError = '';
+    const refreshResult = await refreshAccessToken(apiKey, refreshToken);
     if ('error' in refreshResult) {
       web3AuthProvider.authProviderData.isAuthenticated = false;
       web3AuthProvider.authProviderData.authError = refreshResult.error;
+    } else if ('errors' in refreshResult) {
+      web3AuthProvider.authProviderData.isAuthenticated = false;
+      refreshResult.errors.forEach((error: ErrorMultipleBody) => {
+        web3AuthProvider.authProviderData.authError += `${error.msg}.`;
+      });
     } else {
       // valid refresh token now fetch data
       const fetchUserResult = await fetchUser(refreshResult.address, refreshResult.accessToken, apiKey);
@@ -109,10 +117,16 @@ const web3AuthProvider = {
     return web3AuthProvider.authProviderData;
   },
   async auth3RefreshAccess(apiKey: string, freshToken: string) {
+    web3AuthProvider.authProviderData.authError = '';
     const refreshResult = await refreshAccessToken(apiKey, freshToken);
     if ('error' in refreshResult) {
       web3AuthProvider.authProviderData.isAuthenticated = false;
       web3AuthProvider.authProviderData.authError = refreshResult.error;
+    } else if ('errors' in refreshResult) {
+      web3AuthProvider.authProviderData.isAuthenticated = false;
+      refreshResult.errors.forEach((error: ErrorMultipleBody) => {
+        web3AuthProvider.authProviderData.authError += `${error.msg}.`;
+      });
     } else {
       // valid refresh token now fetch data
       web3AuthProvider.authProviderData.isAuthenticated = true;

@@ -1,14 +1,16 @@
 {
   "name": "web3-cloud",
-  "version": "1.0.1",
-  "description": "Simple Sign-up, Sign In Ethereum account authenticator. Power by Sign-In with Ethereum.",
+  "version": "1.0.2",
+  "description": "Simple Web3 onboarding with Ethereum wallets.",
   "keywords": [
     "Ethereum",
     "web3",
+    "web3 onboarding",
     "authentication",
     "wallet connect",
     "digital signatures",
-    "EIP-1271"
+    "EIP-1271",
+    "Sign-in with Ethereum"
   ],
   "author": {
     "name": "Idris Bowman",

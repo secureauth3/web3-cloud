@@ -239,6 +239,7 @@ interface FormSignatureData {
   message: string;
   nonceSetFromBackend: boolean;
   web3Provider: ethers.providers.Web3Provider;
+  token: string;
 }
 
 // Form component error callback data types
@@ -264,7 +265,7 @@ Form component of callback data (FormSignatureData)
 | message | string | String that contains message that account signed
 | provideType | string | name of Wallet provider (metamask, wallet-connect)
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
-
+| token | string | Unique session identifier
 
 Form component error callback data (ErrorMessageData)
 | Data | Data Type | Description
@@ -371,6 +372,7 @@ interface ButtonSignatureData {
   message: string;
   nonceSetFromBackend: boolean;
   web3Provider: ethers.providers.Web3Provider;
+  token: string;
 }
 
 // Button component error callback data types
@@ -393,7 +395,7 @@ Button component of callback data (ButtonSignatureData)
 | message | string | String that contains message that account signed
 | provideType | string | name of Wallet provider (metamask, wallet-connect)
 | web3Provider | ethers.providers.Web3Provider | Web3 Provider
-
+| token | string | Unique session identifier
 
 Button component error callback data (ErrorMessageData)
 | Data | Data Type | Description
