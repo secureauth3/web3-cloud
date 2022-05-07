@@ -1,5 +1,12 @@
 # web3-cloud
 
+## 1.0.3
+
+**Features**
+- Initial release:
+1. useAuth3Token React hook
+- Use this hook to store encrypted JWT and connected wallet status in local storage
+
 ## 1.0.2
 
 **Features**

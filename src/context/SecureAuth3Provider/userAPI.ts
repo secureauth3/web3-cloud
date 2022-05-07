@@ -107,7 +107,7 @@ export async function verify(web3Values: AuthData, apiKey: string): Promise<Veri
   }
 }
 
-export async function refreshAccessToken(apiKey: string, freshToken: string): Promise<RefreshTokenUserReponse | ErrorResponse | ErrorResponseMultiple> {
+export async function refreshAccessToken(apiKey: string, freshToken: string, accesToken: string): Promise<RefreshTokenUserReponse | ErrorResponse | ErrorResponseMultiple> {
   try {
     const payload = {
       refreshToken: freshToken
@@ -116,7 +116,7 @@ export async function refreshAccessToken(apiKey: string, freshToken: string): Pr
     const config: AxiosRequestConfig = {
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        'Authorization': `Bearer ${accesToken} ${apiKey}`,
       }
     }
 

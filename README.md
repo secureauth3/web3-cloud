@@ -34,25 +34,7 @@ Web3-cloud serves as a React wrapper around Sign-In with Ethereum and Secure Aut
 (Desktop, tablet, Mobile)
 
 ## Webpack v5 support
-There are a lot of breaking changes in Webpack v5. Set up your project to work with web3-cloud library:
-
-#### configuring Webpack v5
-We highly recommend you to use the stable ```npm i react-scripts@4.0.3``` version of Webpack. If you want to use web3-cloud on your project with Webpack v5 you need to add the fallback to your ```webpack.config.js``` file:
-
-```javascript
-module.exports = {
-    resolve: {
-        fallback: {
-            assert: require.resolve('assert'),
-            crypto: require.resolve('crypto-browserify'),
-            http: require.resolve('stream-http'),
-            https: require.resolve('https-browserify'),
-            os: require.resolve('os-browserify/browser'),
-            stream: require.resolve('stream-browserify'),
-        },
-    },
-};
-```
+There are a lot of breaking changes in Webpack v5. We highly recommend you to use the stable ```npm i react-scripts@4.0.3``` version of react-scripts.
 
 ---
 
@@ -79,7 +61,7 @@ Please register your app with Secure Auth3 to obtain a API key(no credit card re
 ---
 
 ## Web3 Authentication provider
-- Wrap your app in a <SecureAuth3Provider>, and provide your apiKey:
+- Wrap your app in a ```<SecureAuth3Provider>```, and provide your apiKey:
 
 ```tsx
 import React from "react";
@@ -94,13 +76,33 @@ ReactDOM.render(
 );
 ```
 
-And call the hooks inside your apps auth page:
+- call the useAuth hooks inside your apps for web3 sign in/signup:
 ```tsx
-import React from "react";
-import { ErrorMessageData, Form, FormSignatureData, NewAuth3User, useAuth } from "web3-cloud";
+import React {useEffect} from "react";
+import { ErrorMessageData, Form, FormSignatureData, NewAuth3User, useAuth, useAuth3Token } from "web3-cloud";
 
 export default function AuthPage() {
   const auth = useAuth();
+  const { setAuth3Token, setWalletStatus } = useAuth3Token(); 
+
+  useEffect(() => {
+    /* Secure Auth3 - Single Sign On for persistence logins
+      hint(You can define useEffect with an empty dependency which will 
+      ensure that the functions only run once)
+    */
+    const doSingleSignin = async () => {
+      const auth3Token = getAccessToken('<your-auth3-token-secret>');
+      const ssoResult = await auth.auth3SSO(auth3Token.refreshToken, auth3Token.accessToken);
+      if (ssoResult.isAuthenticated) {
+        // Save authenicated user JWR 
+        setAuth3Token(ssoResult.accessToken, ssoResult.refreshToken, AUTH3_REFRESH_TOKEN_SECRET);
+      }
+      return;
+    }
+
+    doSingleSignin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const authCallbackData = useCallback(async (web3Values: FormSignatureData) => {
     try {
@@ -111,7 +113,7 @@ export default function AuthPage() {
               {
               account: web3Values.address,
               email: web3Values.email,
-              firstName: web3Values.firstName? web3Values.firstName : 'First'
+              firstName: web3Values.firstName? web3Values.firstName : 'First',
               lastName: web3Values.lastName? web3Values.lastName : 'Last',
               ens: web3Values.ens,
               chainId: web3Values.chainId,
@@ -126,6 +128,9 @@ export default function AuthPage() {
             signature: web3Values.signature,
             message: web3Values.message
           });
+          setWalletStatus('true', web3Values.provideType);
+          setAuth3Token(signInResults.accessToken, signInResults.refreshToken, '<your-auth3-token-secret>');
+
           break;
         case 'SIGN_IN':
           // Secure Auth3 - Sign in user
@@ -135,6 +140,9 @@ export default function AuthPage() {
             signature: web3Values.signature,
             message: web3Values.message
           });
+          setWalletStatus('true', web3Values.provideType);
+          setAuth3Token(signInResults2.accessToken, signInResults2.refreshToken, '<your-auth3-token-secret>');
+
           break;
         default:
           break;
@@ -172,6 +180,8 @@ export default function AuthPage() {
 
 ## Hooks
 - useChainInfo
+- useAuth3Token
+- useAuth
 
 ### useChainInfo
 - Use this hook to get information about a chainId
@@ -194,16 +204,37 @@ export default function AuthPage() {
 
 ---
 
+### useAuth3Token
+- Use this hook to store encrypted JWT and connected wallet status in local storage
+
+```jsx
+
+import React from "react";
+import { useAuth3Token } from "web3-cloud";
+
+export default function AuthPage() {
+  const { setAuth3Token, setWalletStatus } = useAuth3Token(); 
+
+  return (
+    <div>
+      {setAuth3Token('jwt-access-token', 'jwt-refresh-token', '<your-auth3-token-secret>')}
+      {setWalletStatus('true', 'metamask')}
+    </div>
+  )
+}
+
+```
+
+---
+
 ## Form component 
 - Description: Dapp UI Form component for Ethereum wallet sign in/sign up
 - Features:
   1. Sign in/Sign up: Responsive Form with validation (email, first name, last name)
   2. ENS Resolution
-  3. (Optional)Fetch nonce from backend server(Sign-In with Ethereum)
-      - Follow recommended documention for fetching nonce from a backend server (https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/implement-the-backend)
-  4. (EIP-1271 signatures) Sign-In with Ethereum - https://github.com/spruceid/siwe
-  5. Sign message with nonces
-  6. Signature expiration time: 10 mins
+  3. (EIP-1271 signatures) Sign-In with Ethereum - https://github.com/spruceid/siwe
+  4. Sign message with nonces
+  5. Signature expiration time: 10 mins
 
 ```typescript
 // Form component prop types 
@@ -339,11 +370,9 @@ return (
 - Description: Dapp UI Form component for Ethereum wallet signature capture
 - Features:
   1. ENS Resolution
-  2. (Optional)Fetch nonce from backend server(Sign-In with Ethereum)
-      - Follow recommended documention for fetching nonce from a backend server (https://docs.login.xyz/sign-in-with-ethereum/quickstart-guide/implement-the-backend)
-  3. (EIP-1271 signatures) Sign-In with Ethereum - https://github.com/spruceid/siwe
-  4. Sign message with nonces
-  5. Signature expiration time: 10 mins
+  2. (EIP-1271 signatures) Sign-In with Ethereum - https://github.com/spruceid/siwe
+  3. Sign message with nonces
+  4. Signature expiration time: 10 mins
 
 ```typescript
 // Button component prop types 

@@ -89,9 +89,9 @@ const web3AuthProvider = {
     }
     return web3AuthProvider.authProviderData;
   },
-  async auth3SSO(apiKey: string, refreshToken: string) {
+  async auth3SSO(apiKey: string, refreshToken: string, accessToken: string) {
     web3AuthProvider.authProviderData.authError = '';
-    const refreshResult = await refreshAccessToken(apiKey, refreshToken);
+    const refreshResult = await refreshAccessToken(apiKey, refreshToken, accessToken);
     if ('error' in refreshResult) {
       web3AuthProvider.authProviderData.isAuthenticated = false;
       web3AuthProvider.authProviderData.authError = refreshResult.error;
@@ -116,9 +116,9 @@ const web3AuthProvider = {
     }
     return web3AuthProvider.authProviderData;
   },
-  async auth3RefreshAccess(apiKey: string, freshToken: string) {
+  async auth3RefreshAccess(apiKey: string, freshToken: string, accessToken: string) {
     web3AuthProvider.authProviderData.authError = '';
-    const refreshResult = await refreshAccessToken(apiKey, freshToken);
+    const refreshResult = await refreshAccessToken(apiKey, freshToken, accessToken);
     if ('error' in refreshResult) {
       web3AuthProvider.authProviderData.isAuthenticated = false;
       web3AuthProvider.authProviderData.authError = refreshResult.error;
