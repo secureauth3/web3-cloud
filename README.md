@@ -94,7 +94,7 @@ export default function AuthPage() {
       const auth3Token = getAccessToken('<your-auth3-token-secret>');
       const ssoResult = await auth.auth3SSO(auth3Token.refreshToken, auth3Token.accessToken);
       if (ssoResult.isAuthenticated) {
-        // Save authenicated user JWR 
+        // Save authenicated user JWT
         setAuth3Token(ssoResult.accessToken, ssoResult.refreshToken, AUTH3_REFRESH_TOKEN_SECRET);
       }
       return;
