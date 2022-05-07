@@ -76,14 +76,33 @@ ReactDOM.render(
 );
 ```
 
-And call the hooks inside your apps auth page:
+- call the useAuth hooks inside your apps for web3 sign in/signup:
 ```tsx
-import React from "react";
+import React {useEffect} from "react";
 import { ErrorMessageData, Form, FormSignatureData, NewAuth3User, useAuth, useAuth3Token } from "web3-cloud";
 
 export default function AuthPage() {
   const auth = useAuth();
   const { setAuth3Token, setWalletStatus } = useAuth3Token(); 
+
+  useEffect(() => {
+    /* Secure Auth3 - Single Sign On for persistence logins
+      hint(You can define useEffect with an empty dependency which will 
+      ensure that the functions only run once)
+    */
+    const doSingleSignin = async () => {
+      const auth3Token = getAccessToken('<your-auth3-token-secret>');
+      const ssoResult = await auth.auth3SSO(auth3Token.refreshToken, auth3Token.accessToken);
+      if (ssoResult.isAuthenticated) {
+        // Save authenicated user JWR 
+        setAuth3Token(ssoResult.accessToken, ssoResult.refreshToken, AUTH3_REFRESH_TOKEN_SECRET);
+      }
+      return;
+    }
+
+    doSingleSignin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const authCallbackData = useCallback(async (web3Values: FormSignatureData) => {
     try {
