@@ -86,7 +86,8 @@ export async function verify(web3Values: AuthData, apiKey: string): Promise<Veri
       signature: web3Values.signature,
       message: web3Values.message,
       email: web3Values.email,
-      token: web3Values.token
+      token: web3Values.token,
+      chainId: web3Values.chainId
     };
 
     const config: AxiosRequestConfig = {

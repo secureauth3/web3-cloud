@@ -29,6 +29,7 @@ export interface AuthData {
   message: string;
   email: string;
   token: string;
+  chainId: number;
 }
 
 export interface SecureAuth3ProviderProps {
@@ -52,6 +53,7 @@ export interface UserAuthData {
   signature: string;
   message: string;
   token: string;
+  chainId: number;
 }
 
 export interface AuthContextType {

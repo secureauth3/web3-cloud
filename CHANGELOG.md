@@ -1,9 +1,15 @@
 # web3-cloud
 
+## 1.0.4
+
+**Features**
+- Feature release:
+1. And chainId to auth3Signin hook
+
 ## 1.0.3
 
 **Features**
-- Initial release:
+- Feature release:
 1. useAuth3Token React hook
 - Use this hook to store encrypted JWT and connected wallet status in local storage
 
