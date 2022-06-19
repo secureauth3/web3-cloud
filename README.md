@@ -250,8 +250,13 @@ interface FormProps {
   homePageurl: string;
   disableErrorDisplay: boolean;
   messageToSign: string;
+  legalPolicy?: LegalPolicy[]
 }
 
+interface LegalPolicy {
+  name: string;
+  url: string;
+}
 
 // Form component signature callback data types 
 interface FormSignatureData {
