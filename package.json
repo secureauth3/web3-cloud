@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Simple Web3 onboarding with Ethereum wallets.",
   "keywords": [
     "Ethereum",
@@ -52,7 +52,6 @@
     "@types/jest": "27.0.3",
     "@types/react": "17.0.34",
     "@types/react-modal": "^3.13.1",
-    "@types/react-redux": "^7.1.23",
     "@walletconnect/web3-provider": "1.7.1",
     "babel-jest": "27.4.5",
     "babel-loader": "8.2.3",
@@ -71,9 +70,8 @@
     "typescript": "4.4.4"
   },
   "peerDependencies": {
-    "react": ">=17.0.2",
-    "react-dom": ">=17.0.2",
-    "react-redux": "^>=17.2.8",
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0",
     "@walletconnect/web3-provider": "1.7.1"
   },
   "scripts": {
