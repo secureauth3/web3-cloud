@@ -32,6 +32,18 @@ const Template: ComponentStory<typeof Form> = (args: FormProps) =>
       formErrorCallback={(async (error: ErrorMessageData) => {
         errorObject = error;
       })}   
+      legalPolicy={
+        [
+            {
+                name: 'Privacy Policy',
+                url: 'https://www.secureauth3.com'
+            },
+            {
+                name: 'Terms of Service',
+                url: 'https://www.secureauth3.com'
+            }
+        ]
+    }
     />
 </div>;
  

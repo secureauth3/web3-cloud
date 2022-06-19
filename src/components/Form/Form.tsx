@@ -30,6 +30,12 @@ export interface FormProps {
   homePageurl: string;
   disableErrorDisplay: boolean;
   messageToSign: string;
+  legalPolicy?: LegalPolicy[]
+}
+
+export interface LegalPolicy {
+  name: string;
+  url: string;
 }
 
 /**
@@ -47,6 +53,7 @@ export function Form({
   homePageurl,
   disableErrorDisplay,
   messageToSign,
+  legalPolicy
   }: FormProps) {
 
   const buttonStyle = {
@@ -282,6 +289,37 @@ export function Form({
     }));
   }
 
+  const renderLegalDocs = () => {
+    if (legalPolicy) {
+      return (
+        <div className="legal-docs-container">
+          <div className="form-check">
+            <input className="form-check-input" type="checkbox" required></input>
+            <label className="form-check-label">
+            You agree to the {legalPolicy.map((policy: LegalPolicy, index) => {
+              let showAnd = false;
+              if (index !== legalPolicy.length -1) {
+                showAnd = true;
+              }
+              return ( 
+                <>
+                  <a key={index} target="_blank" rel="noreferrer" href={policy.url} style={likStlye}>{policy.name}</a>
+                    {showAnd && <span> and </span>}
+                </>
+              );
+            })}
+            {
+            }
+            </label>
+          </div>
+      </div>
+      );
+    } else {
+      return;
+    }
+    
+  }
+
   const renderSignUpView = () => {
     return(
       <form className="web3-cloud-signin-form" onSubmit={(e) => doOpenModal(e, ACTION_TPYE.SIGN_UP)}>
@@ -294,6 +332,7 @@ export function Form({
         <div className="form-group  web3-cloud-email">
           <input className='form-control' type="email" placeholder="Email address" value={web3Values.email} onChange={onEmailChanged} required/>
         </div>
+       {renderLegalDocs()}
         <div>
           <button
             type="submit"

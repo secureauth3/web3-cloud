@@ -49,6 +49,11 @@
     color: black;
 }
 
+.legal-docs-container {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
 /* Tablet styling */
 @media only screen and (min-width: 768px) {
     .web3-cloud-sign-in-container {

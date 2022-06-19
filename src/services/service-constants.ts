@@ -3,10 +3,16 @@ export interface NetworkInfo {
     scannerUrl: string;
 }
 
+// TODO: Add polgon to supported networks
 export const CHAINID_NETWORK_MAP = new Map<number, NetworkInfo>([
     [1, {
         name: 'Mainnet Ethereum',
         scannerUrl: 'https://etherscan.io/address'
+        }
+    ],
+    [137, {
+        name: 'Polygon',
+        scannerUrl: 'https://polygonscan.com/address'
         }
     ],
     [3, {
