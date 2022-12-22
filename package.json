@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Simple Web3 onboarding with Ethereum wallets.",
   "keywords": [
     "Ethereum",
@@ -17,13 +17,13 @@
     "email": "idrisbowman@gmail.com",
     "url": "http://www.idrisbowman.com"
   },
-  "homepage": "https://github.com/V00D00-child/web3-cloud#readme",
+  "homepage": "https://github.com/secureauth3/web3-cloud#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/V00D00-child/web3-cloud.git"
+    "url": "git+https://github.com/secureauth3/web3-cloud.git"
   },
   "bugs": {
-    "url": "https://github.com/V00D00-child/web3-cloud/issues"
+    "url": "https://github.com/secureauth3/web3-cloud/issues"
   },
   "license": "MIT",
   "main": "dist/cjs/index.js",
