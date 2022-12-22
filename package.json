@@ -1,6 +1,6 @@
 {
   "name": "web3-cloud",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Simple Web3 onboarding with Ethereum wallets.",
   "keywords": [
     "Ethereum",
@@ -14,7 +14,7 @@
   ],
   "author": {
     "name": "Idris Bowman",
-    "email": "contact@secureauth3.com",
+    "email": "idrisbowman@gmail.com",
     "url": "http://www.idrisbowman.com"
   },
   "homepage": "https://github.com/V00D00-child/web3-cloud#readme",

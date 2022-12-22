@@ -46,17 +46,31 @@ $ npm install web3-cloud
 
 ## API Key
 If you would like to use our Web3 Authentication provider feature an API key is required.
-Please register your app with Secure Auth3 to obtain a API key(no credit card required). 
+Please register your app with Secure Auth3 to obtain a API key. 
 - [Get an API key](https://www.secureauth3.com/)
 
 
 # 🗺️ Table of contents 
 - [`web3-cloud`](#web3-cloud)
-- [Quick start](#quick-start)
-- [Web3 Authentication provider](#web3-authentication-provider)
-- [Form component](#form-component)
-- [Button component](#button-component)
-- [Hooks](#hooks)
+  - [Quick start](#quick-start)
+  - [Requirements](#requirements)
+  - [Device support](#device-support)
+  - [Webpack v5 support](#webpack-v5-support)
+  - [Install](#install)
+  - [API Key](#api-key)
+- [🗺️ Table of contents](#️-table-of-contents)
+  - [Web3 Authentication provider](#web3-authentication-provider)
+  - [Hooks](#hooks)
+    - [useChainInfo](#usechaininfo)
+    - [useAuth3Token](#useauth3token)
+  - [Form component](#form-component)
+    - [Usage (Form component)](#usage-form-component)
+  - [Button component](#button-component)
+    - [Usage (Button component)](#usage-button-component)
+  - [How to Contributors](#how-to-contributors)
+    - [Local dev](#local-dev)
+    - [Local testing](#local-testing)
+  - [Contributors](#contributors)
 
 ---
 

@@ -1,5 +1,8 @@
 # web3-cloud
 
+## 1.0.7
+
+- Update docs
 ## 1.0.4
 
 **Features**
